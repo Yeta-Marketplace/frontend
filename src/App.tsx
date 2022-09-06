@@ -1,8 +1,6 @@
 import { useState } from 'react'
-import logo from './logo.svg'
 import './App.css'
 import axios from 'axios'
-
 import { apiUrl } from './env'
 
 function App() {
@@ -11,8 +9,7 @@ function App() {
   const [rootResponse, setRootResponse] = useState("")
 
   const getRoot = () => {
-    axios.get('http://api.localhost/').then((response) => {
-      console.log(response);
+    axios.get( apiUrl ).then((response) => {
       setRootResponse( JSON.stringify( response.data ) )
     })
   };
@@ -20,39 +17,14 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        {apiUrl}
+
+        <h1> <mark>Yet A</mark> nother Marketplace</h1>
+        
         <button onClick={ getRoot }> GET <code>api.yeta.market/</code> </button>
         {rootResponse}
+        <br></br>
 
-        {/* <img src={logo} className="App-logo" alt="logo" />
-        <p>Hello Vite + React!</p>
-        <p>
-          <button type="button" onClick={() => setCount((count) => count + 1)}>
-            count is: {count}
-          </button>
-        </p>
-        <p>
-          Edit <code>App.tsx</code> and save to test HMR updates.
-        </p>
-        <p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-          {' | '}
-          <a
-            className="App-link"
-            href="https://vitejs.dev/guide/features.html"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Vite Docs
-          </a>
-        </p> */}
+        <small> <a href={apiUrl + "/docs"} style={{color: "grey", opacity: "20%"}}>full docs</a> </small>
       </header>
     </div>
   )
