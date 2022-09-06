@@ -1,14 +1,30 @@
 import { useState } from 'react'
 import logo from './logo.svg'
 import './App.css'
+import axios from 'axios'
+
+import { apiUrl } from './env'
 
 function App() {
   const [count, setCount] = useState(0)
+  
+  const [rootResponse, setRootResponse] = useState("")
+
+  const getRoot = () => {
+    axios.get('http://api.localhost/').then((response) => {
+      console.log(response);
+      setRootResponse( JSON.stringify( response.data ) )
+    })
+  };
 
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
+        {apiUrl}
+        <button onClick={ getRoot }> GET <code>api.yeta.market/</code> </button>
+        {rootResponse}
+
+        {/* <img src={logo} className="App-logo" alt="logo" />
         <p>Hello Vite + React!</p>
         <p>
           <button type="button" onClick={() => setCount((count) => count + 1)}>
@@ -36,7 +52,7 @@ function App() {
           >
             Vite Docs
           </a>
-        </p>
+        </p> */}
       </header>
     </div>
   )
