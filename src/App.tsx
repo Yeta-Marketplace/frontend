@@ -1,32 +1,29 @@
-import { useState } from 'react'
+
 import './App.css'
-import axios from 'axios'
-import { apiUrl } from './env'
+import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
+
+import Header from './components/Header'
+import Login from './components/Login'
+import Logout from './components/Logout'
+import Home from './components/Home'
+import PageNotFound from './components/PageNotFound'
+import useToken from './utils/token';
+
 
 function App() {
-  const [count, setCount] = useState(0)
-  
-  const [rootResponse, setRootResponse] = useState("")
 
-  const getRoot = () => {
-    axios.get( apiUrl ).then((response) => {
-      setRootResponse( JSON.stringify( response.data ) )
-    })
-  };
+  const { token, setToken } = useToken();
 
   return (
-    <div className="App">
-      <header className="App-header">
-
-        <h1> <mark>Yet A</mark> nother Marketplace</h1>
-        
-        <button onClick={ getRoot }> GET <code>api.yeta.market/</code> </button>
-        {rootResponse}
-        <br></br>
-
-        <small> <a href={apiUrl + "/docs"} style={{color: "grey", opacity: "20%"}}>full docs</a> </small>
-      </header>
-    </div>
+    <BrowserRouter>
+      <Header loggedIn={!!token} />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={!token ? <Login setToken={setToken} /> : <Navigate to="/" />} />
+        <Route path="/logout" element={<Logout setToken={setToken} />} />
+        <Route path="*" element={<PageNotFound />} />
+      </Routes>
+    </BrowserRouter>
   )
 }
 
