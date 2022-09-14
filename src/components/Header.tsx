@@ -2,7 +2,7 @@ import { apiUrl } from '../env'
 import { Link } from 'react-router-dom'
 import styled from "styled-components"
 
-export const AppHeader = styled.div`
+const AppHeader = styled.div`
   background-color: #c1c5cf;
   height: 10vh;
   display: flex;

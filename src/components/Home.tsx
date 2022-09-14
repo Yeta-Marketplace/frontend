@@ -1,6 +1,6 @@
 import styled from "styled-components"
 
-export const AppHeader = styled.div`
+const AppHeader = styled.div`
   background-color: #282c34;
   min-height: 90vh;
   display: flex;
