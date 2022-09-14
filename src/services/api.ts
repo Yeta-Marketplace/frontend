@@ -10,18 +10,17 @@ function authHeaders(token: string) {
   };
 }
 
+// TODO: maybe redesign as a class to abstract out api.Url stuff. Axios.create https://www.youtube.com/watch?v=12l6lkW6JhE
 export const api = {
     async logInGetToken(username: string, password: string) {
       const params = new URLSearchParams();
       params.append('username', username);
       params.append('password', password);
   
-      return axios.post(`${apiUrl}/v1/login/access-token`, params);
-      // .catch(
-      //   (err: AxiosError) => {
-      //     alert('Failed to retrieve Access-Token')
-      //   }
-      // );
+      return axios.post(`${apiUrl}/v1/login/access-token`, params)
+                  .then( response => response.data.access_token )
+                  .catch((err: AxiosError) => { return null; } // TODO: Currently if errors, prints to console log. Not ideal.
+      );
     },
     async getMe(token: string) {
       return axios.get<IUserProfile>(`${apiUrl}/v1/users/me`, authHeaders(token));
