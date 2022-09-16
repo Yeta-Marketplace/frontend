@@ -15,16 +15,16 @@ const AppHeader = styled.div`
 
 
 type Props = {
-  loggedIn: boolean
+  signedIn: boolean
 }
 
-function Header({ loggedIn }: Props) {
+function Header({ signedIn }: Props) {
   return (
     <AppHeader>
       <h1> <Link to='/'>Yeta</Link> </h1>
-      {loggedIn === true
-        ? <Link to='/logout'>Sign Out</Link>
-        : <Link to='/login'>Sign In</Link>
+      {signedIn === true
+        ? <Link to='/signout'>Sign Out</Link>
+        : <Link to='/signup'>Sign Up</Link>
       }
       <small> <a href={apiUrl + "/docs"} style={{ color: "grey" }}>API docs</a> </small>
     </AppHeader>

@@ -1,6 +1,6 @@
 import axios, {AxiosError} from 'axios';
 import { apiUrl } from '../env';
-import { IUserProfile, IUserProfileUpdate, IUserProfileCreate } from '../interfaces/user';
+import { IUserProfile, IUserProfileUpdate, IUserProfileCreate, IUserProfileCreateOpen } from '../interfaces/user';
 
 function authHeaders(token: string) {
   return {
@@ -45,6 +45,11 @@ export const api = {
         new_password: password,
         token,
       });
+    },
+
+    // Public Methods
+    async createUserOpen(data: IUserProfileCreateOpen) {
+      return axios.post<IUserProfile>(`${apiUrl}/v1/users/open`, data);
     },
   };
   

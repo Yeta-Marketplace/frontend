@@ -3,8 +3,9 @@ import './App.css'
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 
 import Header from './components/Header'
-import Login from './components/Login'
-import Logout from './components/Logout'
+import Signup from './components/Signup'
+import Signin from './components/Signin'
+import Signout from './components/Signout'
 import Home from './components/Home'
 import PageNotFound from './components/PageNotFound'
 import useToken from './utils/token';
@@ -16,11 +17,12 @@ function App() {
 
   return (
     <BrowserRouter>
-      <Header loggedIn={!!token} />
+      <Header signedIn={!!token} />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/login" element={!token ? <Login setToken={setToken} /> : <Navigate to="/" />} />
-        <Route path="/logout" element={<Logout setToken={setToken} />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/signin" element={!token ? <Signin setToken={setToken} /> : <Navigate to="/" />} />
+        <Route path="/signout" element={<Signout setToken={setToken} />} />
         <Route path="*" element={<PageNotFound />} />
       </Routes>
     </BrowserRouter>

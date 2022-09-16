@@ -1,6 +1,6 @@
 import styled from "styled-components"
 
-const AppHeader = styled.div`
+const HomeDiv = styled.div`
   background-color: #282c34;
   min-height: 90vh;
   display: flex;
@@ -14,9 +14,10 @@ const AppHeader = styled.div`
 
 function Home({ }) {
   return (
-    <AppHeader>
+    <HomeDiv>
       <h1> <mark>Yet A</mark> nother Marketplace</h1>
-    </AppHeader>
+      <h4 style={{ color: '#4b5059' }}> The only marketplace designed for Developers </h4>
+    </HomeDiv>
   )
 }
 
