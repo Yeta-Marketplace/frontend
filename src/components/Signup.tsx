@@ -20,6 +20,7 @@ const Signup = ({ }: Props) => {
       .then(response => {
         const user = response.data;
         console.log(`Hello ${user.full_name}`);
+        setSuccessMsg(user.full_name);
       })
       .catch((error) => {
         if (axios.isAxiosError(error)) {
@@ -31,6 +32,15 @@ const Signup = ({ }: Props) => {
           setErrorMsg(`Unexpected error: ${error.message}`);
         }
       });
+  }
+
+  if (successMsg) {
+    return (
+      <div className='App'>
+        <h1>Welcome to the club, {successMsg}!</h1>
+        <h2><Link to='/signin'>Sign In</Link></h2>
+      </div>
+    )
   }
 
   return (
