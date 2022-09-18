@@ -15,6 +15,7 @@ const Main = styled.h1`
   color: ${colors.platinum};
 `
 const MainHighlight = styled.mark`
+  background-color: transparent;
   color: ${colors.orange};
   padding: 0 2px;
 `
