@@ -1,8 +1,11 @@
 import { apiUrl } from '../env'
 import { Link } from 'react-router-dom'
-import styled from "styled-components"
+import styled from 'styled-components'
 import Logo from './Logo';
 import { colors } from './constants';
+
+import AppBar from '@mui/material/AppBar';
+
 
 const AppHeader = styled.div`
   background-color: ${colors.darkgrey};
@@ -22,14 +25,16 @@ type Props = {
 
 function Header({ signedIn }: Props) {
   return (
-    <AppHeader>
-      <Logo />
-      {signedIn === true
-        ? <Link to='/signout'>Sign Out</Link>
-        : <Link to='/signup'>Sign Up</Link>
-      }
-      <small> <a href={apiUrl + "/docs"} style={{ color: "grey" }}>API docs</a> </small>
-    </AppHeader>
+    <AppBar position="static">
+      <AppHeader>
+        <Logo />
+        {signedIn === true
+          ? <Link to='/signout'>Sign Out</Link>
+          : <Link to='/signup'>Sign Up</Link>
+        }
+        <small> <a href={apiUrl + '/docs'} style={{ color: 'grey' }}>API docs</a> </small>
+      </AppHeader>
+    </AppBar>
   )
 }
 

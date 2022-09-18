@@ -1,7 +1,7 @@
 
 import './App.css'
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
-import styled from "styled-components"
+import styled from '@emotion/styled'
 
 import Header from './components/Header'
 import Signup from './components/Signup'
