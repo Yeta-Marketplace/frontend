@@ -1,7 +1,6 @@
 import { Link } from 'react-router-dom'
 import { colors } from './constants'
 import styled from "styled-components"
-import "@fontsource/roboto"
 
 type Props = {}
 
