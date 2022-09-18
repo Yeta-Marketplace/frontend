@@ -1,3 +1,6 @@
+// Material UI rewrite:
+// https://github.com/mui/material-ui/blob/v5.10.5/docs/data/material/getting-started/templates/sign-in/SignIn.tsx
+
 import React, { useState } from 'react'
 import { api } from '../services/api'
 import { Link } from 'react-router-dom';
