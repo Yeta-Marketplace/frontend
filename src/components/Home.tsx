@@ -1,22 +1,33 @@
 import styled from "styled-components"
+import { colors } from "./constants"
 
 const HomeDiv = styled.div`
-  background-color: #282c34;
+  background-color: ${colors.darkgrey};
   min-height: 90vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
-  color: white;
 `
 
+const Main = styled.h1`
+  color: ${colors.platinum};
+`
+const MainHighlight = styled.mark`
+  color: ${colors.orange};
+  padding: 0 2px;
+`
+
+const Submain = styled.h3`
+  color: ${colors.lightgrey};
+`
 
 function Home({ }) {
   return (
     <HomeDiv>
-      <h1> <mark>Yet A</mark> nother Marketplace</h1>
-      <h4 style={{ color: '#4b5059' }}> The only marketplace designed for Developers </h4>
+      <Main> <MainHighlight>Yet A</MainHighlight>nother Marketplace</Main>
+      <Submain> The only marketplace designed for Developers </Submain>
     </HomeDiv>
   )
 }

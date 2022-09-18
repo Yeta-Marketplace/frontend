@@ -1,9 +1,11 @@
 import { apiUrl } from '../env'
 import { Link } from 'react-router-dom'
 import styled from "styled-components"
+import Logo from './Logo';
+import { colors } from './constants';
 
 const AppHeader = styled.div`
-  background-color: #c1c5cf;
+  background-color: ${colors.darkgrey};
   height: 10vh;
   display: flex;
   flex-direction: row;
@@ -21,7 +23,7 @@ type Props = {
 function Header({ signedIn }: Props) {
   return (
     <AppHeader>
-      <h1> <Link to='/'>Yeta</Link> </h1>
+      <Logo />
       {signedIn === true
         ? <Link to='/signout'>Sign Out</Link>
         : <Link to='/signup'>Sign Up</Link>
