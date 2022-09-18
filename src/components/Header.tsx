@@ -18,6 +18,10 @@ const AppHeader = styled.div`
   color: rgb(29, 22, 0);
 `
 
+const WorkInProgressLink = styled(Link)`
+  color: #333;
+`
+
 
 type Props = {
   signedIn: boolean
@@ -28,6 +32,9 @@ function Header({ signedIn }: Props) {
     <AppBar position="static">
       <AppHeader>
         <Logo />
+        <WorkInProgressLink to='/workinprogress'>🛠 Garage Sales 🛠</WorkInProgressLink>
+        <WorkInProgressLink to='/workinprogress'>🛠 Buy 🛠</WorkInProgressLink>
+        <WorkInProgressLink to='/workinprogress'>🛠 Sell 🛠</WorkInProgressLink>
         {signedIn === true
           ? <Link to='/signout'>Sign Out</Link>
           : <Link to='/signup'>Sign Up</Link>

@@ -10,6 +10,7 @@ import Signout from './components/Signout'
 import Home from './components/Home'
 import PageNotFound from './components/PageNotFound'
 import useToken from './utils/token'
+import WorkInProgress from './components/WorkInProgress';
 
 
 const Root = styled.div`
@@ -30,6 +31,7 @@ function App() {
           <Route path="/signup" element={<Signup />} />
           <Route path="/signin" element={!token ? <Signin setToken={setToken} /> : <Navigate to="/" />} />
           <Route path="/signout" element={<Signout setToken={setToken} />} />
+          <Route path="/workinprogress" element={<WorkInProgress />} />
           <Route path="*" element={<PageNotFound />} />
         </Routes>
       </BrowserRouter>
