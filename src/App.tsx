@@ -1,8 +1,7 @@
 
-import './App.css'
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
-import styled from '@emotion/styled'
 
+import { GlobalStyles } from './globalStyles'
 import Header from './components/Header'
 import Signup from './components/Signup'
 import Signin from './components/Signin'
@@ -13,29 +12,23 @@ import useToken from './utils/token'
 import WorkInProgress from './components/WorkInProgress';
 
 
-const Root = styled.div`
-  font-family: "Roboto";
-`
-
-
 function App() {
 
   const { token, setToken } = useToken();
 
   return (
-    <Root>
-      <BrowserRouter>
-        <Header signedIn={!!token} />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/signin" element={!token ? <Signin setToken={setToken} /> : <Navigate to="/" />} />
-          <Route path="/signout" element={<Signout setToken={setToken} />} />
-          <Route path="/workinprogress" element={<WorkInProgress />} />
-          <Route path="*" element={<PageNotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </Root>
+    <BrowserRouter>
+      <GlobalStyles />
+      <Header signedIn={!!token} />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/signin" element={!token ? <Signin setToken={setToken} /> : <Navigate to="/" />} />
+        <Route path="/signout" element={<Signout setToken={setToken} />} />
+        <Route path="/workinprogress" element={<WorkInProgress />} />
+        <Route path="*" element={<PageNotFound />} />
+      </Routes>
+    </BrowserRouter>
   )
 }
 
