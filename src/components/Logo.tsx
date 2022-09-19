@@ -17,7 +17,7 @@ const AppLogo = styled(Link)`
 
 function Logo({ }: Props) {
   return (
-    <AppLogo to='/'>Yeta</AppLogo>
+    <AppLogo to='/'>YetA</AppLogo>
   )
 }
 
