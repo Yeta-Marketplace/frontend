@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import { colors } from './constants'
+import { colors } from '../styles/colors'
 
 const HomeDiv = styled.div`
   background-color: ${colors.darkgrey};

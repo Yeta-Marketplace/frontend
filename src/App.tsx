@@ -1,16 +1,16 @@
 
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 
-import { GlobalStyles } from './globalStyles'
+import { GlobalStyles } from './styles/globalStyles'
+import useToken from './utils/token'
+
 import Header from './components/Header'
 import Signup from './components/Signup'
 import Signin from './components/Signin'
 import Signout from './components/Signout'
 import Home from './components/Home'
 import PageNotFound from './components/PageNotFound'
-import useToken from './utils/token'
 import WorkInProgress from './components/WorkInProgress';
-
 
 function App() {
 

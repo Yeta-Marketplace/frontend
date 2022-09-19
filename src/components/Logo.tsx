@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { colors } from './constants'
+import { colors } from '../styles/colors'
 import styled from '@emotion/styled'
 
 type Props = {}

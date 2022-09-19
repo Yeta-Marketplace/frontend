@@ -2,7 +2,7 @@ import { apiUrl } from '../env'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import Logo from './Logo';
-import { colors } from './constants';
+import { colors } from '../styles/colors';
 
 import AppBar from '@mui/material/AppBar';
 
