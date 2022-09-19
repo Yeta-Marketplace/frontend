@@ -18,7 +18,14 @@ const AppHeader = styled.div`
   color: rgb(29, 22, 0);
 `
 
-const WorkInProgressLink = styled(Link)`
+const NiceLink = styled(Link)`
+  text-decoration: none;
+  &:hover {
+    color: ${colors.platinum};
+  }
+`
+
+const WorkInProgressLink = styled(NiceLink)`
   color: #333;
 `
 
@@ -36,8 +43,8 @@ function Header({ signedIn }: Props) {
         <WorkInProgressLink to='/workinprogress'>🛠 Buy 🛠</WorkInProgressLink>
         <WorkInProgressLink to='/workinprogress'>🛠 Sell 🛠</WorkInProgressLink>
         {signedIn === true
-          ? <Link to='/signout'>Sign Out</Link>
-          : <Link to='/signup'>Sign Up</Link>
+          ? <NiceLink to='/signout'>Sign Out</NiceLink>
+          : <NiceLink to='/signup'>Sign Up</NiceLink>
         }
         <small> <a href={apiUrl + '/docs'} style={{ color: 'grey' }}>API docs</a> </small>
       </AppHeader>
