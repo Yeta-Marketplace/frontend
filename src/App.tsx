@@ -10,6 +10,7 @@ import Signin from './components/Signin'
 import Signout from './components/Signout'
 import Home from './components/Home'
 import PageNotFound from './components/PageNotFound'
+import YardSales from './components/YardSales'
 import WorkInProgress from './components/WorkInProgress';
 
 function App() {
@@ -25,6 +26,7 @@ function App() {
         <Route path="/signup" element={<Signup />} />
         <Route path="/signin" element={!token ? <Signin setToken={setToken} /> : <Navigate to="/" />} />
         <Route path="/signout" element={<Signout setToken={setToken} />} />
+        <Route path="/yardsales" element={<YardSales />} />
         <Route path="/workinprogress" element={<WorkInProgress />} />
         <Route path="*" element={<PageNotFound />} />
       </Routes>

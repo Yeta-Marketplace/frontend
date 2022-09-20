@@ -39,7 +39,7 @@ function Header({ signedIn }: Props) {
     <AppBar position="static">
       <AppHeader>
         <Logo />
-        <WorkInProgressLink to='/workinprogress'>🛠 Garage Sales 🛠</WorkInProgressLink>
+        <WorkInProgressLink to='/yardsales'>Yard Sales</WorkInProgressLink>
         <WorkInProgressLink to='/workinprogress'>🛠 Buy 🛠</WorkInProgressLink>
         <WorkInProgressLink to='/workinprogress'>🛠 Sell 🛠</WorkInProgressLink>
         {signedIn === true
