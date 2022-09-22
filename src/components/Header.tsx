@@ -3,13 +3,14 @@ import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import Logo from './Logo';
 import { colors } from '../styles/colors';
+import { heights } from '../styles/heights';
 
 import AppBar from '@mui/material/AppBar';
 
 
 const AppHeader = styled.div`
   background-color: ${colors.darkgrey};
-  height: 10vh;
+  height: ${heights.headerVH};
   display: flex;
   flex-direction: row;
   align-items: center;

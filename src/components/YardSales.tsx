@@ -1,16 +1,22 @@
 
 import { useState } from 'react';
 import styled from 'styled-components'
+import 'mapbox-gl/dist/mapbox-gl.css';
+import { heights } from '../styles/heights';
+import YardSalesMap from './YardSalesMap';
+
 
 type Props = {}
 
-const CenterDiv = styled.div`
+const MainDiv = styled.div`
   text-align: center;
+  height: ${heights.nonHeaderVH};
 `
 
+
 function YardSales({ }: Props) {
-    const [latitude, setLat] = useState<number | null>(null);
-    const [longitude, setLng] = useState<number | null>(null);
+    const [latitude, setLatitude] = useState<number | null>(null);
+    const [longitude, setLongitude] = useState<number | null>(null);
     const [status, setStatus] = useState<string | null>(null);
 
     const getLocation = () => {
@@ -20,22 +26,29 @@ function YardSales({ }: Props) {
             setStatus('Locating...');
             navigator.geolocation.getCurrentPosition((position) => {
                 setStatus(null);
-                setLat(position.coords.latitude);
-                setLng(position.coords.longitude);
+                setLatitude(position.coords.latitude);
+                setLongitude(position.coords.longitude);
             }, () => {
                 setStatus('Unable to retrieve your location');
-            });
+            },
+                { enableHighAccuracy: true } // might slow things down
+            );
         }
     }
 
     return (
-        <CenterDiv>
-            <h1>YardSales</h1>
-            <button onClick={getLocation}>Get My Location</button>
-            {status && <p>Status: {status}</p>}
-            {latitude && <p>Latitude: {latitude}</p>}
-            {longitude && <p>Longitude: {longitude}</p>}
-        </CenterDiv>
+        <MainDiv>
+            <h1 style={{ 'margin': '0px', 'height': '3%' }}>YardSales</h1>
+            {(latitude && longitude)
+                ? <YardSalesMap longitude={longitude} latitude={latitude} />
+                : (
+                    <>
+                        <button onClick={getLocation}>Get My Location</button>
+                        {status && <p>Status: {status}</p>}
+                    </>
+                )
+            }
+        </MainDiv>
     )
 }
 
