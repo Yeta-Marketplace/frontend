@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { heights } from '../styles/heights';
 import YardSalesMap from './YardSalesMap';
+import { ILocation } from '../interfaces/location';
 
 
 type Props = {}
@@ -15,8 +16,7 @@ const MainDiv = styled.div`
 
 
 function YardSales({ }: Props) {
-    const [latitude, setLatitude] = useState<number | null>(null);
-    const [longitude, setLongitude] = useState<number | null>(null);
+    const [location, setLocation] = useState<ILocation | null>(null);
     const [status, setStatus] = useState<string | null>(null);
 
     const getLocation = () => {
@@ -26,8 +26,7 @@ function YardSales({ }: Props) {
             setStatus('Locating...');
             navigator.geolocation.getCurrentPosition((position) => {
                 setStatus(null);
-                setLatitude(position.coords.latitude);
-                setLongitude(position.coords.longitude);
+                setLocation({ latitude: position.coords.latitude, longitude: position.coords.longitude });
             }, () => {
                 setStatus('Unable to retrieve your location');
             },
@@ -39,8 +38,8 @@ function YardSales({ }: Props) {
     return (
         <MainDiv>
             <h1 style={{ 'margin': '0px', 'height': '3%' }}>YardSales</h1>
-            {(latitude && longitude)
-                ? <YardSalesMap longitude={longitude} latitude={latitude} />
+            {location
+                ? <YardSalesMap location={location} />
                 : (
                     <>
                         <button onClick={getLocation}>Get My Location</button>
