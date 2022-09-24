@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components'
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { heights } from '../styles/heights';
@@ -34,6 +34,10 @@ function YardSales({ }: Props) {
             );
         }
     }
+
+    useEffect(() => {
+        getLocation();
+    })
 
     return (
         <MainDiv>
