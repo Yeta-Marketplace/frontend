@@ -1,9 +1,9 @@
 
 import styled from 'styled-components'
-import Map, { Marker, Popup } from 'react-map-gl';
+import Map, { Marker } from 'react-map-gl';
 import { MAPBOX_TOKEN } from '../env'
 import { useEffect, useState } from 'react';
-import { IYardSaleProfile } from '../interfaces/yardsale';
+import { IYardSale } from '../interfaces/yardsale';
 import { api } from '../services/api';
 import YardSalesSelectedPopup from './YardSalesSelectedPopup';
 import { ILocation } from '../interfaces/location';
@@ -23,18 +23,14 @@ const SidebarDiv = styled.div`
     border-radius: 4px;
 `
 
-const StyledMap = styled(Map)`
-    width: '100vw'; 
-    height: '97%';
-`
-
 type Props = {
-    location: ILocation
+    location: ILocation,
+    setLocation: Function
 }
 
-function YardSalesMap({ location }: Props) {
-    const [yardsales, setYardsales] = useState<IYardSaleProfile[]>([]);
-    const [selectedYardsale, setSelectedYardsale] = useState<IYardSaleProfile | null>(null);
+function YardSalesMap({ location, setLocation }: Props) {
+    const [yardsales, setYardsales] = useState<IYardSale[]>([]);
+    const [selectedYardsale, setSelectedYardsale] = useState<IYardSale | null>(null);
 
     useEffect(() => {
         async function getYardsales() {
@@ -49,7 +45,8 @@ function YardSalesMap({ location }: Props) {
             <SidebarDiv>
                 Longitude: {location.longitude} | Latitude: {location.latitude}
             </SidebarDiv>
-            <StyledMap
+            <Map
+                style={{ height: '100%' }}
                 reuseMaps
                 initialViewState={{
                     ...location,
@@ -58,8 +55,6 @@ function YardSalesMap({ location }: Props) {
                 mapStyle="mapbox://styles/mapbox/streets-v9"
                 mapboxAccessToken={MAPBOX_TOKEN}
             >
-                {/* YOU ARE HERE */}
-                <Marker latitude={location.latitude} longitude={location.longitude} color="red" />
 
                 {/* YARD SALES AROUND YOU */}
                 {yardsales.map(yardsale => (
@@ -74,9 +69,21 @@ function YardSalesMap({ location }: Props) {
                     />
                 ))}
 
+                {/* YOU ARE HERE */}
+                <Marker
+                    draggable
+                    latitude={location.latitude}
+                    longitude={location.longitude}
+                    color="red"
+                    onDragEnd={e => {
+                        setLocation({ latitude: e.lngLat.lat, longitude: e.lngLat.lng });
+                    }}
+                />
+
+
                 {/* SELECTED YARD SALE */}
                 {selectedYardsale && YardSalesSelectedPopup({ selectedYardsale, setSelectedYardsale })}
-            </StyledMap>
+            </Map>
         </>
     )
 }

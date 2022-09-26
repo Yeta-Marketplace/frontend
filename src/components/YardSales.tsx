@@ -1,23 +1,23 @@
 
 import { useEffect, useState } from 'react';
-import styled from 'styled-components'
+import Grid from '@mui/material/Unstable_Grid2';
 import 'mapbox-gl/dist/mapbox-gl.css';
+
 import { heights } from '../styles/heights';
 import YardSalesMap from './YardSalesMap';
 import { ILocation } from '../interfaces/location';
+import YardSaleHeader from './YardSalesHeader';
+import YardSalesCreate from './YardSalesCreate';
+
+type Props = {
+    signedIn: boolean
+}
 
 
-type Props = {}
-
-const MainDiv = styled.div`
-  text-align: center;
-  height: ${heights.nonHeaderVH};
-`
-
-
-function YardSales({ }: Props) {
+function YardSales({ signedIn }: Props) {
     const [location, setLocation] = useState<ILocation | null>(null);
     const [status, setStatus] = useState<string | null>(null);
+    const [showCreateFrom, setShowCreateForm] = useState(false);
 
     const getLocation = () => {
         if (!navigator.geolocation) {
@@ -36,22 +36,37 @@ function YardSales({ }: Props) {
     }
 
     useEffect(() => {
-        getLocation();
+        if (!location) {
+            getLocation();
+        }
     })
 
+    const mapColumns = (showCreateFrom ? 6 : 12);
+    const headerHeight = 10;
+    const bodyHeight = 100 - headerHeight;
+
     return (
-        <MainDiv>
-            <h1 style={{ 'margin': '0px', 'height': '3%' }}>YardSales</h1>
-            {location
-                ? <YardSalesMap location={location} />
-                : (
-                    <>
-                        <button onClick={getLocation}>Get My Location</button>
-                        {status && <p>Status: {status}</p>}
-                    </>
-                )
-            }
-        </MainDiv>
+        <Grid container sx={{ height: heights.nonHeaderVH }} rowSpacing={0}>
+            <Grid xs={12} sx={{ height: `${headerHeight}%`, }}>
+                <YardSaleHeader isLocated={!!location} showCreateFrom={showCreateFrom} setShowCreateForm={setShowCreateForm} />
+            </Grid>
+            <Grid xs={mapColumns} sx={{ height: `${bodyHeight}%` }}>
+                {location
+                    ? <YardSalesMap location={location} setLocation={setLocation} />
+                    : (
+                        <>
+                            <button onClick={getLocation}>Get My Location</button>
+                            {status && <p>Status: {status}</p>}
+                        </>
+                    )
+                }
+            </Grid>
+            {showCreateFrom && location && (
+                <Grid xs={12 - mapColumns} sx={{ height: `${bodyHeight}%` }}>
+                    <YardSalesCreate location={location} />
+                </Grid>
+            )}
+        </Grid >
     )
 }
 

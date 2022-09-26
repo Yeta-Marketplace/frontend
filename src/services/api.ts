@@ -1,7 +1,7 @@
 import axios, {AxiosError} from 'axios';
 import { apiUrl } from '../env';
 import { IUserProfile, IUserProfileUpdate, IUserProfileCreate, IUserProfileCreateOpen } from '../interfaces/user';
-import { IYardSaleProfile } from '../interfaces/yardsale';
+import { IYardSale, IYardSaleCreate } from '../interfaces/yardsale';
 
 function authHeaders(token: string) {
   return {
@@ -55,7 +55,15 @@ export const api = {
 
     // =========================== Yard Sales ============================
     async getYardSales({skip = 0, limit = 100}) {
-      return axios.get<IYardSaleProfile[]>(`${apiUrl}/v1/yardsales/`, {data: {skip: skip, limit: limit}});
+      return axios.get<IYardSale[]>(`${apiUrl}/v1/yardsales/`, {data: {skip: skip, limit: limit}});
+    },
+    
+    async createYardSale(token: string, data: IYardSaleCreate) {
+      return axios.post(`${apiUrl}/v1/yardsales`, data, authHeaders(token));
+    },
+    
+    async createYardSaleOpen(data: IYardSaleCreate) {
+      return axios.post(`${apiUrl}/v1/yardsales/open`, data);
     },
   };
   
