@@ -1,16 +1,17 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 import axios, { AxiosError } from 'axios'
+import { useFormik } from 'formik';
 import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'
-import { useFormik } from 'formik';
-
-import { api } from '../services/api'
-import { IUserProfileCreateOpen } from '../interfaces/user';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import Alert from '@mui/material/Alert';
+
+import { api } from '../services/api'
+import { IUserProfileCreateOpen } from '../interfaces/user';
+import { ApiError } from '../interfaces/api';
 
 type Props = {}
 
@@ -24,36 +25,35 @@ const Signup = ({ }: Props) => {
     full_name: "",
     email: "",
     password: ""
-  }
+  };
 
   const formik = useFormik({
     initialValues: initialValues,
     //   validationSchema: validationSchema,
     onSubmit: (values) => {
-
       async function createUserOpen() {
         const response = await api.createUserOpen(values)
           .then(response => {
             const user = response.data;
-            console.log(`Hello ${user.full_name}`);
-            setSuccessMsg(user.full_name);
             setErrorMsg("");
+            setSuccessMsg("User Created Successfully! Redirecting to Sign In...");
+
+            setTimeout(() => {
+              navigate('/signin')
+            }, 3000);
           })
           .catch((error) => {
             if (axios.isAxiosError(error)) {
-              console.log('error message: ', error.message);
-              console.log(error);
-              setErrorMsg(error.message);
+              try {
+                const data = error.response?.data as ApiError;
+                setErrorMsg(data.detail);
+              } catch (e) {
+                setErrorMsg(`Unexpected error: error.message`);
+              }
             } else {
-              console.log('unexpected error: ', error);
               setErrorMsg(`Unexpected error: ${error.message}`);
             }
           });
-        setSuccessMsg("User Created Successfully! Redirecting to Sign In...");
-
-        setTimeout(() => {
-          navigate('/signin')
-        }, 3000);
       }
       createUserOpen();
     },

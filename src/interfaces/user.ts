@@ -26,3 +26,9 @@ export interface IUserProfileCreateOpen {
     full_name?: string;
     password: string;
 }
+
+// this class is fishy cause login uses username instead of email
+export interface IUserSignin {
+    email: string;
+    password: string;
+}
