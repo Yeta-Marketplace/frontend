@@ -1,71 +1,134 @@
 import React, { useState } from 'react'
-import { api } from '../services/api'
+import { Link, useNavigate } from 'react-router-dom';
 import axios, { AxiosError } from 'axios'
-import { Link } from 'react-router-dom';
+import Box from '@mui/material/Box'
+import Container from '@mui/material/Container'
+import { useFormik } from 'formik';
+
+import { api } from '../services/api'
+import { IUserProfileCreateOpen } from '../interfaces/user';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import Stack from '@mui/material/Stack';
+import Alert from '@mui/material/Alert';
 
 type Props = {}
 
 const Signup = ({ }: Props) => {
-  // TODO: keeping this here might be a security concern
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [full_name, setFullname] = useState("");
-
   const [successMsg, setSuccessMsg] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    await api.createUserOpen({ email, password, full_name })
-      .then(response => {
-        const user = response.data;
-        console.log(`Hello ${user.full_name}`);
-        setSuccessMsg(user.full_name);
-      })
-      .catch((error) => {
-        if (axios.isAxiosError(error)) {
-          console.log('error message: ', error.message);
-          console.log(error);
-          setErrorMsg(error.message);
-        } else {
-          console.log('unexpected error: ', error);
-          setErrorMsg(`Unexpected error: ${error.message}`);
-        }
-      });
+  const navigate = useNavigate();
+
+  const initialValues: IUserProfileCreateOpen = {
+    full_name: "",
+    email: "",
+    password: ""
   }
 
-  if (successMsg) {
-    return (
-      <div className='App'>
-        <h1>Welcome to the club, {successMsg}!</h1>
-        <h2><Link to='/signin'>Sign In</Link></h2>
-      </div>
-    )
-  }
+  const formik = useFormik({
+    initialValues: initialValues,
+    //   validationSchema: validationSchema,
+    onSubmit: (values) => {
+
+      async function createUserOpen() {
+        const response = await api.createUserOpen(values)
+          .then(response => {
+            const user = response.data;
+            console.log(`Hello ${user.full_name}`);
+            setSuccessMsg(user.full_name);
+            setErrorMsg("");
+          })
+          .catch((error) => {
+            if (axios.isAxiosError(error)) {
+              console.log('error message: ', error.message);
+              console.log(error);
+              setErrorMsg(error.message);
+            } else {
+              console.log('unexpected error: ', error);
+              setErrorMsg(`Unexpected error: ${error.message}`);
+            }
+          });
+        setSuccessMsg("User Created Successfully! Redirecting to Sign In...");
+
+        setTimeout(() => {
+          navigate('/signin')
+        }, 3000);
+      }
+      createUserOpen();
+    },
+  });
 
   return (
-    <div className="App signup-wrapper">
-      <h1>Sign Up?</h1>
-      <form onSubmit={handleSubmit}>
-        <label>
-          <p>Email</p>
-          <input type="text" onChange={e => setEmail(e.target.value)} />
-        </label>
-        <label>
-          <p>Name</p>
-          <input type="text" onChange={e => setFullname(e.target.value)} />
-        </label>
-        <label>
-          <p>Password</p>
-          <input type="password" onChange={e => setPassword(e.target.value)} />
-        </label>
-        {errorMsg && <p style={{ color: 'red' }}> {errorMsg} </p>}
-        <p> Already have an account? <Link to='/signin'>Sign In</Link></p>
-        <div>
-          <button type="submit">Sign Up!</button>
-        </div>
-      </form>
-    </div>
+    <Container component="main" maxWidth="xs">
+      <Box
+        sx={{
+          marginTop: 8,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          textAlign: 'center'
+        }}
+      >
+        <h1>Sign Up!</h1>
+        <form onSubmit={formik.handleSubmit}>
+          <TextField
+            id="full_name"
+            name="full_name"
+            label="Name"
+            value={formik.values.full_name}
+            onChange={formik.handleChange}
+            error={formik.touched.full_name && Boolean(formik.errors.full_name)}
+            helperText={formik.touched.full_name && formik.errors.full_name}
+            required
+            fullWidth
+            margin="normal"
+            autoComplete="name"
+            autoFocus
+          />
+          <TextField
+            id="email"
+            name="email"
+            label="Email"
+            value={formik.values.email}
+            onChange={formik.handleChange}
+            error={formik.touched.email && Boolean(formik.errors.email)}
+            helperText={formik.touched.email && formik.errors.email}
+            required
+            fullWidth
+            margin="normal"
+            autoComplete="email"
+          />
+          <TextField
+            id="password"
+            name="password"
+            label="Password"
+            type="password"
+            value={formik.values.password}
+            onChange={formik.handleChange}
+            error={formik.touched.password && Boolean(formik.errors.password)}
+            helperText={formik.touched.password && formik.errors.password}
+            required
+            fullWidth
+            margin="normal"
+            autoComplete="new-password"
+          />
+          <Stack spacing={1}>
+            {errorMsg && <Alert severity="error"> {errorMsg} </Alert>}
+            {successMsg && <Alert severity="success"> {successMsg} </Alert>}
+            <Button
+              color="primary"
+              variant="contained"
+              fullWidth
+              type="submit"
+            >
+              Submit
+            </Button>
+            <p> Already have an account? <Link to='/signin'>Sign In</Link></p>
+          </Stack>
+        </form>
+      </Box>
+    </Container>
   )
 }
 
