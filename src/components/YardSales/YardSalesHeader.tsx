@@ -1,7 +1,7 @@
 import Button from '@mui/material/Button'
 import Stack from '@mui/material/Stack'
 import styled from 'styled-components'
-import { colors } from '../styles/colors'
+import { colors } from '../../styles/colors'
 
 type Props = {
     isLocated: boolean,

@@ -1,12 +1,12 @@
 
 import styled from 'styled-components'
 import Map, { Marker } from 'react-map-gl';
-import { MAPBOX_TOKEN } from '../env'
 import { useEffect, useState } from 'react';
-import { IYardSale } from '../interfaces/yardsale';
-import { api } from '../services/api';
+import { MAPBOX_TOKEN } from '../../env'
+import { IYardSale } from '../../interfaces/yardsale';
+import { api } from '../../services/api';
+import { ILocation } from '../../interfaces/location';
 import YardSalesSelectedPopup from './YardSalesSelectedPopup';
-import { ILocation } from '../interfaces/location';
 
 
 

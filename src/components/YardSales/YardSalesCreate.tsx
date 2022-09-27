@@ -1,17 +1,17 @@
 // https://formik.org/docs/examples/typescript
 // https://github.com/jquense/yup
-import { colors } from '../styles/colors'
+import { colors } from '../../styles/colors'
 import styled from 'styled-components'
 import Button from '@mui/material/Button';
 import Alert from '@mui/material/Alert';
 import TextField from '@mui/material/TextField';
 import Container from '@mui/material/Container';
 import Stack from '@mui/material/Stack';
-import { Formik, Form, Field, ErrorMessage, FormikHelpers, useFormik } from 'formik';
+import { useFormik } from 'formik';
 
-import { api } from '../services/api';
-import { IYardSaleCreate } from '../interfaces/yardsale'
-import { ILocation } from '../interfaces/location';
+import { api } from '../../services/api';
+import { IYardSaleCreate } from '../../interfaces/yardsale'
+import { ILocation } from '../../interfaces/location';
 import { useState } from 'react';
 
 

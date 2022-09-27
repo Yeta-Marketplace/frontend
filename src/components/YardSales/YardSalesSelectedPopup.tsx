@@ -1,5 +1,5 @@
 import { Popup } from 'react-map-gl';
-import { IYardSale } from '../interfaces/yardsale'
+import { IYardSale } from '../../interfaces/yardsale'
 
 type Props = {
     selectedYardsale: IYardSale,

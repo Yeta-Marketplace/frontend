@@ -4,10 +4,10 @@ import Grid from '@mui/material/Unstable_Grid2';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
 import { heights } from '../styles/heights';
-import YardSalesMap from './YardSalesMap';
 import { ILocation } from '../interfaces/location';
-import YardSaleHeader from './YardSalesHeader';
-import YardSalesCreate from './YardSalesCreate';
+import YardSalesMap from './YardSales/YardSalesMap';
+import YardSaleHeader from './YardSales/YardSalesHeader';
+import YardSalesCreate from './YardSales/YardSalesCreate';
 
 type Props = {
     signedIn: boolean
