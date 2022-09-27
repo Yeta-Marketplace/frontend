@@ -1,7 +1,10 @@
+import 'mapbox-gl/dist/mapbox-gl.css';
 
 import { useEffect, useState } from 'react';
+import Box from '@mui/material/Box'
+import Container from '@mui/material/Container'
 import Grid from '@mui/material/Unstable_Grid2';
-import 'mapbox-gl/dist/mapbox-gl.css';
+import Button from '@mui/material/Button';
 
 import { heights } from '../styles/heights';
 import { ILocation } from '../interfaces/location';
@@ -16,6 +19,7 @@ type Props = {
 
 function YardSales({ signedIn }: Props) {
     const [location, setLocation] = useState<ILocation | null>(null);
+    const [lackingPermission, setLackingPermission] = useState(false);
     const [status, setStatus] = useState<string | null>(null);
     const [showCreateFrom, setShowCreateForm] = useState(false);
 
@@ -28,7 +32,8 @@ function YardSales({ signedIn }: Props) {
                 setStatus(null);
                 setLocation({ latitude: position.coords.latitude, longitude: position.coords.longitude });
             }, () => {
-                setStatus('Unable to retrieve your location');
+                setStatus('Unable to retrieve your location. Please check your permissions');
+                setLackingPermission(true);
             },
                 { enableHighAccuracy: true } // might slow things down
             );
@@ -36,7 +41,7 @@ function YardSales({ signedIn }: Props) {
     }
 
     useEffect(() => {
-        if (!location) {
+        if (!lackingPermission && !location) {
             getLocation();
         }
     })
@@ -54,10 +59,29 @@ function YardSales({ signedIn }: Props) {
                 {location
                     ? <YardSalesMap location={location} setLocation={setLocation} />
                     : (
-                        <>
-                            <button onClick={getLocation}>Get My Location</button>
-                            {status && <p>Status: {status}</p>}
-                        </>
+                        <Container >
+                            <Box
+                                sx={{
+                                    marginTop: 8,
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'center',
+                                    textAlign: 'center'
+                                }}
+                            >
+                                <h1>This feature requires access to location (for now)</h1>
+                                <Button
+                                    onClick={getLocation}
+                                    color="primary"
+                                    variant="contained"
+                                    type="submit"
+                                    sx={{ m: 2 }}
+                                >
+                                    Get My Location
+                                </Button>
+                                {status && <p>Status: {status}</p>}
+                            </Box>
+                        </Container>
                     )
                 }
             </Grid>
