@@ -34,7 +34,7 @@ function YardSalesMap({ location, setLocation }: Props) {
 
     useEffect(() => {
         async function getYardsales() {
-            const newYardsales = await api.getYardSales({ skip: 0, limit: 100 }).then(response => response.data);
+            const newYardsales = await api.getYardSales(location.latitude, location.longitude).then(response => response.data);
             setYardsales(newYardsales);
         }
         getYardsales();

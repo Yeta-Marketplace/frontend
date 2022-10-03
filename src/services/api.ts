@@ -54,8 +54,10 @@ export const api = {
     },
 
     // =========================== Yard Sales ============================
-    async getYardSales({skip = 0, limit = 100}) {
-      return axios.get<IYardSale[]>(`${apiUrl}/v1/yardsales/`, {data: {skip: skip, limit: limit}});
+    async getYardSales(latitude: number, longitude: number, distance=25, skip = 0, limit = 100) {
+      return axios.get<IYardSale[]>(`${apiUrl}/v1/yardsales/`, {params: 
+        {latitude, longitude, distance, skip, limit}
+      });
     },
     
     async createYardSale(token: string, data: IYardSaleCreate) {

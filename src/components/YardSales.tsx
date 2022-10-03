@@ -35,7 +35,7 @@ function YardSales({ signedIn }: Props) {
                 setStatus('Unable to retrieve your location. Please check your permissions');
                 setLackingPermission(true);
             },
-                { enableHighAccuracy: true } // might slow things down
+                // { enableHighAccuracy: true } // might slow things down
             );
         }
     }
