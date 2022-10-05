@@ -1,12 +1,13 @@
 
 import styled from '@emotion/styled'
 import { colors } from '../styles/colors'
+import { heights } from '../styles/heights'
 
 type Props = {}
 
 const Div = styled.div`
   background-color: ${colors.darkgrey};
-  min-height: 90vh;
+  min-height: ${heights.nonHeaderVH};
   display: flex;
   flex-direction: column;
   align-items: center;
