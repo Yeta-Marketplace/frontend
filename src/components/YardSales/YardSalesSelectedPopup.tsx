@@ -16,8 +16,8 @@ function YardSalesSelectedPopup({ selectedYardsale, setSelectedYardsale }: Props
         >
             <div>
                 <h2>{selectedYardsale.description}</h2>
-                <p>Start Date: {selectedYardsale.start_date.toString()}</p>
-                <p>End Date: {selectedYardsale.end_date.toString()}</p>
+                <p>Start Date: {(new Date(selectedYardsale.start_date)).toDateString()}</p>
+                <p>End Date: {(new Date(selectedYardsale.end_date)).toDateString()}</p>
                 <a
                     target="_blank"
                     rel="noopener noreferrer"
