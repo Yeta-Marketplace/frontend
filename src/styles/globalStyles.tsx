@@ -15,14 +15,13 @@ export const GlobalStyles = createGlobalStyle`
   a {
     text-decoration: none;
   }
-  /*
+  
   p, h1, h2, h3, h4, h5, h6 {
     margin: 0;
   }
-  /*
 
   code {
    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
- } */
+ }
 `

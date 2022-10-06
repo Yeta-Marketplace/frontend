@@ -1,4 +1,9 @@
 import { useEffect } from 'react'
+import Box from '@mui/material/Box'
+import Container from '@mui/material/Container'
+import Alert from '@mui/material/Alert';
+import { Link } from 'react-router-dom'
+
 import { getLocalToken, removeLocalToken } from '../utils/token';
 
 type Props = {
@@ -14,6 +19,19 @@ export default function Signout({ setToken }: Props) {
     });
 
     return (
-        <div><p>Token cleared - Signout succesful</p></div>
+        <Container component="main" >
+            <Box
+                sx={{
+                    marginTop: 8,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    textAlign: 'center'
+                }}
+            >
+                <Alert severity='success' sx={{ fontSize: 20 }}>Signout succesful!</Alert>
+                <Link to='/'> Back to Home</Link>
+            </Box>
+        </Container>
     )
 }
