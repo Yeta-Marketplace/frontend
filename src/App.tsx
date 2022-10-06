@@ -1,6 +1,9 @@
 
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 
+import { ThemeProvider } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
+import theme from './styles/theme'
 import { GlobalStyles } from './styles/globalStyles'
 import useToken from './utils/token'
 
@@ -18,19 +21,22 @@ function App() {
   const { token, setToken } = useToken();
 
   return (
-    <BrowserRouter>
-      <GlobalStyles />
-      <Header signedIn={!!token} />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/signin" element={!token ? <Signin setToken={setToken} /> : <Navigate to="/" />} />
-        <Route path="/signout" element={<Signout setToken={setToken} />} />
-        <Route path="/yardsales" element={<YardSales signedIn={!!token} />} />
-        <Route path="/workinprogress" element={<WorkInProgress />} />
-        <Route path="*" element={<PageNotFound />} />
-      </Routes>
-    </BrowserRouter>
+    <ThemeProvider theme={theme}>
+      <BrowserRouter>
+        <GlobalStyles />
+        <CssBaseline />
+        <Header signedIn={!!token} />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/signin" element={!token ? <Signin setToken={setToken} /> : <Navigate to="/" />} />
+          <Route path="/signout" element={<Signout setToken={setToken} />} />
+          <Route path="/yardsales" element={<YardSales signedIn={!!token} />} />
+          <Route path="/workinprogress" element={<WorkInProgress />} />
+          <Route path="*" element={<PageNotFound />} />
+        </Routes>
+      </BrowserRouter>
+    </ThemeProvider>
   )
 }
 
