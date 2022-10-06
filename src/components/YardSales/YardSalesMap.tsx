@@ -34,7 +34,7 @@ function YardSalesMap({ location, setLocation }: Props) {
 
     useEffect(() => {
         async function getYardsales() {
-            const newYardsales = await api.getYardSales(location.latitude, location.longitude).then(response => response.data);
+            const newYardsales = await api.getYardSales(location.latitude, location.longitude, 1000, 0, 300).then(response => response.data);
             setYardsales(newYardsales);
         }
         getYardsales();
@@ -43,7 +43,7 @@ function YardSalesMap({ location, setLocation }: Props) {
     return (
         <>
             <SidebarDiv>
-                Longitude: {location.longitude} | Latitude: {location.latitude}
+                Latitude: {location.latitude} | Longitude: {location.longitude}
             </SidebarDiv>
             <Map
                 style={{ height: '100%' }}
@@ -79,7 +79,6 @@ function YardSalesMap({ location, setLocation }: Props) {
                         setLocation({ latitude: e.lngLat.lat, longitude: e.lngLat.lng });
                     }}
                 />
-
 
                 {/* SELECTED YARD SALE */}
                 {selectedYardsale && YardSalesSelectedPopup({ selectedYardsale, setSelectedYardsale })}
