@@ -8,6 +8,7 @@ import { GlobalStyles } from './styles/globalStyles'
 import useToken from './utils/token'
 
 import Header from './components/Header'
+import ResponsiveAppBar from './components/ResponsiveAppBar'
 import Signup from './components/Signup'
 import Signin from './components/Signin'
 import Signout from './components/Signout'
@@ -25,7 +26,8 @@ function App() {
       <BrowserRouter>
         <GlobalStyles />
         <CssBaseline />
-        <Header signedIn={!!token} />
+        {/* <Header signedIn={!!token} /> */}
+        <ResponsiveAppBar signedIn={!!token} />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/signup" element={<Signup />} />
