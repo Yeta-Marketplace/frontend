@@ -1,7 +1,7 @@
 
 import styled from 'styled-components'
 import Map, { Marker } from 'react-map-gl';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { MAPBOX_TOKEN } from '../../env'
 import { IYardSale } from '../../interfaces/yardsale';
 import { api } from '../../services/api';
@@ -24,67 +24,73 @@ const SidebarDiv = styled.div`
 `
 
 type Props = {
-    location: ILocation,
-    setLocation: Function
+  location: ILocation,
+  setLocation: Function
 }
 
 function YardSalesMap({ location, setLocation }: Props) {
-    const [yardsales, setYardsales] = useState<IYardSale[]>([]);
-    const [selectedYardsale, setSelectedYardsale] = useState<IYardSale | null>(null);
+  const [yardsales, setYardsales] = useState<IYardSale[]>([]);
+  const [selectedYardsale, setSelectedYardsale] = useState<IYardSale | null>(null);
 
-    useEffect(() => {
-        async function getYardsales() {
-            const newYardsales = await api.getYardSales(location.latitude, location.longitude, 1000, 0, 300).then(response => response.data);
-            setYardsales(newYardsales);
-        }
-        getYardsales();
-    }, []);
+  useEffect(() => {
+    async function getYardsales() {
+      const newYardsales = await api.getYardSales(location.latitude, location.longitude, 1000, 0, 300).then(response => response.data);
+      setYardsales(newYardsales);
+    }
+    if (yardsales.length) {
+      getYardsales();
+    }
+  }, []);
 
-    return (
-        <>
-            <SidebarDiv>
-                Latitude: {location.latitude} | Longitude: {location.longitude}
-            </SidebarDiv>
-            <Map
-                style={{ height: '100%' }}
-                reuseMaps
-                initialViewState={{
-                    ...location,
-                    zoom: 14
-                }}
-                mapStyle="mapbox://styles/mapbox/streets-v9"
-                mapboxAccessToken={MAPBOX_TOKEN}
-            >
-
-                {/* YARD SALES AROUND YOU */}
-                {yardsales.map(yardsale => (
-                    <Marker
-                        key={yardsale.id}
-                        latitude={yardsale.latitude}
-                        longitude={yardsale.longitude}
-                        color="blue"
-                        onClick={e => {
-                            setSelectedYardsale(yardsale);
-                        }}
-                    />
-                ))}
-
-                {/* YOU ARE HERE */}
-                <Marker
-                    draggable
-                    latitude={location.latitude}
-                    longitude={location.longitude}
-                    color="red"
-                    onDragEnd={e => {
-                        setLocation({ latitude: e.lngLat.lat, longitude: e.lngLat.lng });
-                    }}
-                />
-
-                {/* SELECTED YARD SALE */}
-                {selectedYardsale && YardSalesSelectedPopup({ selectedYardsale, setSelectedYardsale })}
-            </Map>
-        </>
+  const yardsaleMarkers = useMemo(() =>
+    yardsales.map(yardsale => (
+      <Marker
+        key={yardsale.id}
+        latitude={yardsale.latitude}
+        longitude={yardsale.longitude}
+        color="blue"
+        onClick={e => {
+          setSelectedYardsale(yardsale);
+        }}
+      />
     )
+    ), [yardsales]);
+
+  return (
+    <>
+      <SidebarDiv>
+        Latitude: {location.latitude} | Longitude: {location.longitude}
+      </SidebarDiv>
+      <Map
+        style={{ height: '100%' }}
+        reuseMaps
+        initialViewState={{
+          ...location,
+          zoom: 14
+        }}
+        mapStyle="mapbox://styles/mapbox/streets-v9"
+        mapboxAccessToken={MAPBOX_TOKEN}
+      >
+
+        {/* YARD SALES AROUND YOU */}
+        {yardsaleMarkers}
+
+        {/* YOU ARE HERE */}
+        <Marker
+          draggable
+          latitude={location.latitude}
+          longitude={location.longitude}
+          color="red"
+          onDragEnd={e => {
+            setLocation({ latitude: e.lngLat.lat, longitude: e.lngLat.lng });
+          }}
+        />
+
+        {/* SELECTED YARD SALE */}
+        {selectedYardsale && YardSalesSelectedPopup({ selectedYardsale, setSelectedYardsale })}
+      </Map>
+    </>
+  )
 }
 
 export default YardSalesMap
