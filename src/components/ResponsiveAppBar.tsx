@@ -115,8 +115,8 @@ function ResponsiveAppBar({ signedIn }: Props) {
           <Typography
             variant="h2"
             noWrap
-            component="a"
-            href="/"
+            component={RouterLink}
+            to="/"
             sx={{
               mr: 5,
               display: { xs: 'none', md: 'flex' },
