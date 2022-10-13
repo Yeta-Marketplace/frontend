@@ -37,7 +37,7 @@ function YardSalesMap({ location, setLocation }: Props) {
       const newYardsales = await api.getYardSales(location.latitude, location.longitude, 1000, 0, 300).then(response => response.data);
       setYardsales(newYardsales);
     }
-    if (yardsales.length) {
+    if (!yardsales.length) {
       getYardsales();
     }
   }, []);
