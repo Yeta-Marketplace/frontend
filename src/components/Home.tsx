@@ -1,6 +1,9 @@
 import styled from '@emotion/styled'
 import { colors } from '../styles/colors'
 import { heights } from '../styles/heights'
+import { apiUrl } from '../env';
+
+import Link from '@mui/material/Link';
 
 const HomeDiv = styled.div`
   background-color: ${colors.darkgrey};
@@ -29,8 +32,8 @@ function Home({ }) {
   return (
     <HomeDiv>
       <Main> <MainHighlight>Yet A</MainHighlight>nother Marketplace</Main>
-      <Submain> The only marketplace designed for Developers </Submain>
-    </HomeDiv>
+      <Submain> The only marketplace designed for <Link href={apiUrl + '/docs'} color='secondary' underline="hover">Developers</Link> </Submain>
+    </HomeDiv >
   )
 }
 
