@@ -1,16 +1,17 @@
 import 'mapbox-gl/dist/mapbox-gl.css';
 
 import { useEffect, useState } from 'react';
+import { useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'
-import Grid from '@mui/material/Unstable_Grid2';
-import Button from '@mui/material/Button';
+import Fab from '@mui/material/Fab';
+import Slide from '@mui/material/Slide';
+import AddIcon from '@mui/icons-material/Add';
 
 import { heights } from '../styles/heights';
 import { ILocation } from '../interfaces/location';
 import YardSalesMap from './YardSales/YardSalesMap';
-import YardSaleHeader from './YardSales/YardSalesHeader';
-import YardSalesCreate from './YardSales/YardSalesCreate';
+import YardSalesAdd from './YardSales/YardSalesAdd';
 
 type Props = {
   signedIn: boolean
@@ -18,10 +19,18 @@ type Props = {
 
 
 function YardSales({ signedIn }: Props) {
-  const [location, setLocation] = useState<ILocation | null>(null);
+
+  const theme = useTheme();
+
+  const [location, setLocation] = useState<ILocation>({ latitude: 39.95, longitude: -74.2 });
   const [lackingPermission, setLackingPermission] = useState(false);
+  // TODO: Utilize status field
   const [status, setStatus] = useState<string | null>(null);
   const [showCreateFrom, setShowCreateForm] = useState(false);
+
+  const handleCreateFormChange = () => {
+    setShowCreateForm((prev) => !prev);
+  };
 
   const getLocation = () => {
     if (!navigator.geolocation) {
@@ -46,51 +55,24 @@ function YardSales({ signedIn }: Props) {
     }
   })
 
-  const mapColumns = (showCreateFrom ? 6 : 12);
-  const headerHeight = 10;
-  const bodyHeight = 100 - headerHeight;
+  const mapHeight = showCreateFrom ? '50%' : '100%';
 
   return (
-    <Grid container sx={{ height: heights.nonHeaderVH }} rowSpacing={0}>
-      <Grid xs={12} sx={{ height: `${headerHeight}%`, }}>
-        <YardSaleHeader isLocated={!!location} showCreateFrom={showCreateFrom} setShowCreateForm={setShowCreateForm} />
-      </Grid>
-      <Grid xs={mapColumns} sx={{ height: `${bodyHeight}%` }}>
-        {location
-          ? <YardSalesMap location={location} setLocation={setLocation} />
-          : (
-            <Container >
-              <Box
-                sx={{
-                  marginTop: 8,
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  textAlign: 'center'
-                }}
-              >
-                <h1>This feature requires access to location (for now)</h1>
-                <Button
-                  onClick={getLocation}
-                  color="primary"
-                  variant="contained"
-                  type="submit"
-                  sx={{ m: 2 }}
-                >
-                  Get My Location
-                </Button>
-                {status && <p>Status: {status}</p>}
-              </Box>
-            </Container>
-          )
-        }
-      </Grid>
-      {showCreateFrom && location && (
-        <Grid xs={12 - mapColumns} sx={{ height: `${bodyHeight}%` }}>
-          <YardSalesCreate location={location} />
-        </Grid>
-      )}
-    </Grid >
+    <Box sx={{ height: heights.nonHeaderVH, width: '100%' }} >
+      <Box sx={{ height: mapHeight, transition: "height 0.5s ease-in" }}>
+        <YardSalesMap location={location} setLocation={setLocation} />
+      </Box>
+      <Fab variant="extended" color="primary" aria-label="add" sx={theme.fab} onClick={handleCreateFormChange}>
+        {/* <Fab variant="extended" color="primary" aria-label="add" size='large' sx={{ ...theme.fab, top: 120, right: 1000, color: 'primary' }}> */}
+        <AddIcon />
+        Add Yard Sale
+      </Fab>
+      <Slide direction="up" in={showCreateFrom} mountOnEnter unmountOnExit>
+        <Container>
+          <YardSalesAdd location={location} />
+        </Container>
+      </Slide>
+    </Box>
   )
 }
 

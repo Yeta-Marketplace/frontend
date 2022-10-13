@@ -57,39 +57,34 @@ function YardSalesMap({ location, setLocation }: Props) {
     ), [yardsales]);
 
   return (
-    <>
-      <SidebarDiv>
-        Latitude: {location.latitude} | Longitude: {location.longitude}
-      </SidebarDiv>
-      <Map
-        style={{ height: '100%' }}
-        reuseMaps
-        initialViewState={{
-          ...location,
-          zoom: 14
+    <Map
+      style={{ height: '100%' }}
+      reuseMaps
+      initialViewState={{
+        ...location,
+        zoom: 14
+      }}
+      mapStyle="mapbox://styles/mapbox/streets-v9"
+      mapboxAccessToken={MAPBOX_TOKEN}
+    >
+
+      {/* YARD SALES AROUND YOU */}
+      {yardsaleMarkers}
+
+      {/* YOU ARE HERE */}
+      <Marker
+        draggable
+        latitude={location.latitude}
+        longitude={location.longitude}
+        color="red"
+        onDragEnd={e => {
+          setLocation({ latitude: e.lngLat.lat, longitude: e.lngLat.lng });
         }}
-        mapStyle="mapbox://styles/mapbox/streets-v9"
-        mapboxAccessToken={MAPBOX_TOKEN}
-      >
+      />
 
-        {/* YARD SALES AROUND YOU */}
-        {yardsaleMarkers}
-
-        {/* YOU ARE HERE */}
-        <Marker
-          draggable
-          latitude={location.latitude}
-          longitude={location.longitude}
-          color="red"
-          onDragEnd={e => {
-            setLocation({ latitude: e.lngLat.lat, longitude: e.lngLat.lng });
-          }}
-        />
-
-        {/* SELECTED YARD SALE */}
-        {selectedYardsale && YardSalesSelectedPopup({ selectedYardsale, setSelectedYardsale })}
-      </Map>
-    </>
+      {/* SELECTED YARD SALE */}
+      {selectedYardsale && YardSalesSelectedPopup({ selectedYardsale, setSelectedYardsale })}
+    </Map>
   )
 }
 

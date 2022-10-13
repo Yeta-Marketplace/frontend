@@ -1,33 +1,26 @@
-// https://formik.org/docs/examples/typescript
-// https://github.com/jquense/yup
-import { colors } from '../../styles/colors'
-import styled from 'styled-components'
-import Button from '@mui/material/Button';
+
+import { ILocation } from '../../interfaces/location';
+import { IYardSaleCreate } from '../../interfaces/yardsale'
+
 import Alert from '@mui/material/Alert';
-import TextField from '@mui/material/TextField';
 import Container from '@mui/material/Container';
 import Stack from '@mui/material/Stack';
-import { useFormik } from 'formik';
+import Typography from '@mui/material/Typography';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
 
-import { api } from '../../services/api';
-import { IYardSaleCreate } from '../../interfaces/yardsale'
-import { ILocation } from '../../interfaces/location';
+import { useFormik } from 'formik';
 import { useState } from 'react';
 
+import { api } from '../../services/api';
 
 type Props = {
   location: ILocation
 }
 
-const Sidebar = styled(Container)`
-    background-color: ${colors.lightgrey};
-    height: 100%;
-    text-align: center;
-`
+function YardSalesAdd({ location }: Props) {
 
-
-function YardSalesCreate({ location, }: Props) {
-
+  // Use SNACKBAR in the future: https://mui.com/material-ui/react-snackbar/
   const [successMsg, setSuccessMsg] = useState("");
 
   const initialValues: IYardSaleCreate = {
@@ -36,13 +29,11 @@ function YardSalesCreate({ location, }: Props) {
     longitude: location.longitude,
     start_date: new Date(),
     end_date: new Date(),
-  }
+  };
 
   const formik = useFormik({
     initialValues: initialValues,
-    //   validationSchema: validationSchema,
     onSubmit: (values) => {
-
       async function createYardSale() {
         const response = await api.createYardSaleOpen(values);
         setSuccessMsg("Yard Sale added Successfully!");
@@ -52,14 +43,12 @@ function YardSalesCreate({ location, }: Props) {
   });
 
   return (
-    <Sidebar>
-      {/* <SidebarBox alignContent='center'> */}
+    <Container>
       {successMsg && <Alert severity="success"> {successMsg} </Alert>}
-      <h1> Add Yard Sale!</h1 >
+      <Typography variant='h3' m={2} mt={4} textAlign='center'>Add Yard Sale!</Typography>
       <form onSubmit={formik.handleSubmit}>
         <TextField
           fullWidth
-          style={{ width: "80%", margin: "10px" }}
           id="description"
           name="description"
           label="Description"
@@ -68,29 +57,27 @@ function YardSalesCreate({ location, }: Props) {
           error={formik.touched.description && Boolean(formik.errors.description)}
           helperText={formik.touched.description && formik.errors.description}
         />
-        <h3>Current Location - Drag on Map to Change</h3>
+        <Typography variant='h5' m={1} textAlign='left'>Current Location (Drag on Map to Change):</Typography>
         <Stack direction="row" spacing={2}>
           <TextField
             fullWidth
-            style={{ width: "50%", margin: "10px" }}
+            style={{ width: "50%", margin: "10px 10px 10px 0px" }}
             id="latitude"
             name="latitude"
             label="Latitude"
             type="latitude"
             value={formik.values.latitude}
-            // onChange={formik.handleChange}
             error={formik.touched.latitude && Boolean(formik.errors.latitude)}
             helperText={formik.touched.latitude && formik.errors.latitude}
           />
           <TextField
             fullWidth
-            style={{ width: "50%", margin: "10px" }}
+            style={{ width: "50%", margin: "10px 0px 10px 0px" }}
             id="longitude"
             name="longitude"
             label="Longitude"
             type="longitude"
             value={formik.values.longitude}
-            // onChange={formik.handleChange}
             error={formik.touched.longitude && Boolean(formik.errors.longitude)}
             helperText={formik.touched.longitude && formik.errors.longitude}
           />
@@ -101,13 +88,13 @@ function YardSalesCreate({ location, }: Props) {
           variant="contained"
           fullWidth
           type="submit"
-          style={{ width: "90%", margin: "10px" }}
+          sx={{ mt: 1 }}
         >
           Submit
         </Button>
       </form>
-    </Sidebar>
+    </Container>
   )
 }
 
-export default YardSalesCreate
+export default YardSalesAdd
