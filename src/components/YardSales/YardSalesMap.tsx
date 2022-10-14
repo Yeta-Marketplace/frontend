@@ -7,6 +7,9 @@ import { api } from '../../services/api';
 import { ILocation } from '../../interfaces/location';
 import YardSalesSelectedPopup from './YardSalesSelectedPopup';
 
+// import AddYardSaleIcon from '@mui/icons-material/AddBusiness';
+import AddYardSaleIcon from '@mui/icons-material/AddLocationAlt';
+
 
 type Props = {
   location: ILocation,
@@ -51,26 +54,33 @@ function YardSalesMap({ location, setLocation }: Props) {
       }}
       mapStyle="mapbox://styles/mapbox/streets-v9"
       mapboxAccessToken={MAPBOX_TOKEN}
+      onClick={e => { setLocation({ latitude: e.lngLat.lat, longitude: e.lngLat.lng }); }}
     >
       <NavigationControl />
-      <GeolocateControl />
+      <GeolocateControl onGeolocate={e => {
+        setLocation({ latitude: e.coords.latitude, longitude: e.coords.longitude });
+      }
+      } />
 
       {/* YARD SALES AROUND YOU */}
       {yardsaleMarkers}
 
-      {/* YOU ARE HERE */}
+      {/* SELECTED YARD SALE */}
+      {selectedYardsale && YardSalesSelectedPopup({ selectedYardsale, setSelectedYardsale })}
+
+      {/* CURRENT/CLICKED LOCATION MARKER */}
       <Marker
         draggable
         latitude={location.latitude}
         longitude={location.longitude}
-        color="red"
+        anchor='bottom'
         onDragEnd={e => {
           setLocation({ latitude: e.lngLat.lat, longitude: e.lngLat.lng });
         }}
-      />
+      >
+        <AddYardSaleIcon color='secondary' fontSize='large' sx={{ fontSize: '45px' }} />
+      </Marker>
 
-      {/* SELECTED YARD SALE */}
-      {selectedYardsale && YardSalesSelectedPopup({ selectedYardsale, setSelectedYardsale })}
     </Map>
   )
 }

@@ -64,8 +64,7 @@ function YardSales({ signedIn }: Props) {
         <YardSalesMap location={location} setLocation={setLocation} />
       </Box>
       <Fab variant="extended" color="primary" aria-label="add" sx={theme.fab} onClick={handleCreateFormChange}>
-        <AddIcon />
-        Add Yard Sale
+        <AddIcon /> Add Yard Sale
       </Fab>
       <Slide direction="up" in={showCreateFrom} mountOnEnter unmountOnExit >
         <Container sx={{ background: 'white', position: 'fixed', bottom: 0, left: 0, right: 0, borderRadius: '25px 25px 0px 0px' }}>

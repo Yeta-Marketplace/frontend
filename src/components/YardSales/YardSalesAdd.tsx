@@ -8,6 +8,7 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
+import AddYardSaleIcon from '@mui/icons-material/AddLocationAlt';
 
 import { useFormik } from 'formik';
 import { useState } from 'react';
@@ -42,6 +43,9 @@ function YardSalesAdd({ location }: Props) {
     },
   });
 
+  formik.values.latitude = location.latitude;
+  formik.values.longitude = location.longitude;
+
   return (
     <Container>
       {successMsg && <Alert severity="success"> {successMsg} </Alert>}
@@ -57,7 +61,7 @@ function YardSalesAdd({ location }: Props) {
           error={formik.touched.description && Boolean(formik.errors.description)}
           helperText={formik.touched.description && formik.errors.description}
         />
-        <Typography variant='h5' m={1} textAlign='left'>Current Location (Drag on Map to Change):</Typography>
+        <Typography variant='h5' m={1} textAlign='left'>Drag <AddYardSaleIcon color='secondary' /> to Change Location</Typography>
         <Stack direction="row" spacing={2}>
           <TextField
             fullWidth
