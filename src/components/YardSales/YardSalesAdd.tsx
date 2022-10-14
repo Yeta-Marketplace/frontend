@@ -45,7 +45,7 @@ function YardSalesAdd({ location }: Props) {
   return (
     <Container>
       {successMsg && <Alert severity="success"> {successMsg} </Alert>}
-      <Typography variant='h3' m={2} mt={4} textAlign='center'>Add Yard Sale!</Typography>
+      <Typography variant='h2' m={2} mt={4} textAlign='center' color='secondary' fontWeight='500'>Add Yard Sale!</Typography>
       <form onSubmit={formik.handleSubmit}>
         <TextField
           fullWidth
