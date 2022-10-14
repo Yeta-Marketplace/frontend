@@ -88,7 +88,8 @@ function YardSalesAdd({ location }: Props) {
           variant="contained"
           fullWidth
           type="submit"
-          sx={{ mt: 1 }}
+          size='large'
+          sx={{ mt: 1, mb: 12 }}
         >
           Submit
         </Button>

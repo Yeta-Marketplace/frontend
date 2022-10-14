@@ -55,24 +55,24 @@ function YardSales({ signedIn }: Props) {
     }
   })
 
-  const mapHeight = showCreateFrom ? '50%' : '100%';
+  // const mapHeight = showCreateFrom ? '50%' : '100%';
+  const mapHeight = '100%';
 
   return (
-    <Box sx={{ height: heights.nonHeaderVH, width: '100%' }} >
-      <Box sx={{ height: mapHeight, transition: "height 0.5s ease-in" }}>
+    <Box sx={{ height: heights.nonHeaderVH, width: '100%', overflow: 'hidden' }} >
+      <Box sx={{ height: mapHeight, transition: "height 0.1s ease-in" }}>
         <YardSalesMap location={location} setLocation={setLocation} />
       </Box>
       <Fab variant="extended" color="primary" aria-label="add" sx={theme.fab} onClick={handleCreateFormChange}>
-        {/* <Fab variant="extended" color="primary" aria-label="add" size='large' sx={{ ...theme.fab, top: 120, right: 1000, color: 'primary' }}> */}
         <AddIcon />
         Add Yard Sale
       </Fab>
-      <Slide direction="up" in={showCreateFrom} mountOnEnter unmountOnExit>
-        <Container>
+      <Slide direction="up" in={showCreateFrom} mountOnEnter unmountOnExit >
+        <Container sx={{ background: 'white', position: 'fixed', bottom: 0, left: 0, right: 0, borderRadius: '25px 25px 0px 0px' }}>
           <YardSalesAdd location={location} />
         </Container>
-      </Slide>
-    </Box>
+      </Slide >
+    </Box >
   )
 }
 
