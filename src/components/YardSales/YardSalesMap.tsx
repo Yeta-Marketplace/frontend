@@ -1,6 +1,5 @@
 
-import styled from 'styled-components'
-import Map, { Marker } from 'react-map-gl';
+import Map, { Marker, GeolocateControl, NavigationControl } from 'react-map-gl';
 import { useEffect, useMemo, useState } from 'react';
 import { MAPBOX_TOKEN } from '../../env'
 import { IYardSale } from '../../interfaces/yardsale';
@@ -8,20 +7,6 @@ import { api } from '../../services/api';
 import { ILocation } from '../../interfaces/location';
 import YardSalesSelectedPopup from './YardSalesSelectedPopup';
 
-
-
-const SidebarDiv = styled.div`
-    background-color: rgba(35, 55, 75, 0.9);
-    color: #fff;
-    padding: 6px 12px;
-    font-family: monospace;
-    z-index: 1;
-    position: absolute;
-    top: '10vh';
-    left: '2vw';
-    margin: 12px;
-    border-radius: 4px;
-`
 
 type Props = {
   location: ILocation,
@@ -67,6 +52,8 @@ function YardSalesMap({ location, setLocation }: Props) {
       mapStyle="mapbox://styles/mapbox/streets-v9"
       mapboxAccessToken={MAPBOX_TOKEN}
     >
+      <NavigationControl />
+      <GeolocateControl />
 
       {/* YARD SALES AROUND YOU */}
       {yardsaleMarkers}
