@@ -26,7 +26,6 @@ function App() {
       <BrowserRouter>
         <GlobalStyles />
         <CssBaseline />
-        {/* <Header signedIn={!!token} /> */}
         <ResponsiveAppBar signedIn={!!token} />
         <Routes>
           <Route path="/" element={<Home />} />
