@@ -86,7 +86,7 @@ function ResponsiveAppBar({ signedIn }: Props) {
               }}
             >
               {pages.map((page, index) => (
-                <MenuItem key={page} component={RouterLink} to={pagesLinks[index]}>
+                <MenuItem key={page} component={RouterLink} to={pagesLinks[index]} onClick={handleCloseNavMenu}>
                   {page}
                 </MenuItem>
               ))}
