@@ -37,7 +37,7 @@ function YardSalesAdd({ location }: Props) {
     onSubmit: (values) => {
       async function createYardSale() {
         const response = await api.createYardSaleOpen(values);
-        setSuccessMsg("Yard Sale added Successfully!");
+        setSuccessMsg("Yard Sale added Successfully! Refresh page");
       }
       createYardSale();
     },
