@@ -49,9 +49,9 @@ function ResponsiveAppBar({ signedIn }: Props) {
   };
 
   return (
-    <AppBar position="static">
-      <Container maxWidth="xl">
-        <Toolbar disableGutters sx={{ height: heights.headerVH, }}>
+    <AppBar position="static" sx={{ height: heights.headerVH, overflow: 'hidden' }}>
+      <Container maxWidth="xl" sx={{ height: heights.headerVH, overflow: 'hidden' }}>
+        <Toolbar disableGutters sx={{ height: heights.headerVH, overflow: 'hidden' }}>
 
 
           {/* ================== MOBILE view ========================= */}
@@ -113,7 +113,7 @@ function ResponsiveAppBar({ signedIn }: Props) {
 
           {/* ================== DESKTOP view ========================= */}
           <Typography
-            variant="h2"
+            variant="h3"
             noWrap
             component={RouterLink}
             to="/"
