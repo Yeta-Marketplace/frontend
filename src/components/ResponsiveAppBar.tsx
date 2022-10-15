@@ -30,7 +30,7 @@ function ResponsiveAppBar({ signedIn }: Props) {
 
   const pages = ['Yard Sales', '🛠 Buy 🛠', '🛠 Sell 🛠'];
   const pagesLinks = ['/yardsales', 'workinprogress', 'workinprogress'];
-  const settings = ['🛠Dashboard🛠', 'Report Bug', 'Sign Out'];
+  const settings = ['🛠Dashboard🛠', 'Give Feedback!', 'Sign Out'];
   const settingsLinks = ['/workinprogress', '/feedback', '/signout'];
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
