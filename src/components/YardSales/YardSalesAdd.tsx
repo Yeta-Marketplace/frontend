@@ -49,7 +49,8 @@ function YardSalesAdd({ location }: Props) {
   return (
     <Container>
       {successMsg && <Alert severity="success"> {successMsg} </Alert>}
-      <Typography variant='h2' m={2} mt={4} textAlign='center' color='secondary' fontWeight='500'>Add Yard Sale!</Typography>
+      {/* TODO: Make below smaller on phones */}
+      <Typography sx={{ typography: { sm: 'h2', xs: 'h4' } }} m={2} mt={4} textAlign='center' color='secondary' fontWeight='500'>Add Yard Sale!</Typography>
       <form onSubmit={formik.handleSubmit}>
         <TextField
           fullWidth
@@ -61,7 +62,7 @@ function YardSalesAdd({ location }: Props) {
           error={formik.touched.description && Boolean(formik.errors.description)}
           helperText={formik.touched.description && formik.errors.description}
         />
-        <Typography variant='h5' m={1} textAlign='left'>Drag <AddYardSaleIcon color='secondary' /> to Change Location</Typography>
+        <Typography sx={{ typography: { sm: 'h5', xs: 'body1' } }} m={1} textAlign='left'>Drag <AddYardSaleIcon color='secondary' /> to Change Location</Typography>
         <Stack direction="row" spacing={2}>
           <TextField
             fullWidth
