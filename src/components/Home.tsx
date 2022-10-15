@@ -33,8 +33,8 @@ function Home({ }) {
   return (
     <HomeDiv>
       <Main> <MainHighlight>Yet A</MainHighlight>nother Marketplace</Main>
-      <Submain> The only marketplace designed for <Link color='secondary' underline="hover" component={RouterLink} to='/developers'>Developers</Link>
-      </Submain>
+      {/* <Submain> The only marketplace designed for <Link color='secondary' underline="hover" component={RouterLink} to='/developers'>Developers</Link>
+      </Submain> */}
     </HomeDiv >
   )
 }
