@@ -1,6 +1,6 @@
 
 import { apiUrl } from '../env';
-import { heights } from '../styles/heights'
+import useAppBarHeight from '../utils/useAppBarHeight';
 
 import Container from '@mui/material/Container'
 import Typography from '@mui/material/Typography'
@@ -9,8 +9,10 @@ import Link from '@mui/material/Link';
 type Props = {}
 
 function DevelopersAbout({ }: Props) {
+  const headerHeight = useAppBarHeight();
+
   return (
-    <Container sx={{ minHeight: heights.nonHeaderVH, }}>
+    <Container sx={{ height: `calc(100vh - ${headerHeight}px)`, }}>
       <Typography variant='h1' textAlign='center' mt={5}> Are you a Developer? </Typography>
       <Typography mt={5} variant='body1' sx={{ fontSize: '2rem' }}>
         One of the key differentiators of Yeta is that we made a decision to be as <b>Developer</b>-friendly

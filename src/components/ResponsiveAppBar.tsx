@@ -15,8 +15,6 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import { Link as RouterLink } from 'react-router-dom';
 
-import { heights } from '../styles/heights'
-
 
 type Props = {
   signedIn: boolean,
@@ -49,10 +47,9 @@ function ResponsiveAppBar({ signedIn }: Props) {
   };
 
   return (
-    <AppBar position="static" sx={{ height: heights.headerVH, overflow: 'hidden' }}>
-      <Container maxWidth="xl" sx={{ height: heights.headerVH, overflow: 'hidden' }}>
-        <Toolbar disableGutters sx={{ height: heights.headerVH, overflow: 'hidden' }}>
-
+    <AppBar position="static" >
+      <Container maxWidth="xl" >
+        <Toolbar disableGutters >
 
           {/* ================== MOBILE view ========================= */}
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>

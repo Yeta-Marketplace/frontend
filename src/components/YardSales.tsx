@@ -8,10 +8,11 @@ import Fab from '@mui/material/Fab';
 import Slide from '@mui/material/Slide';
 import AddIcon from '@mui/icons-material/Add';
 
-import { heights } from '../styles/heights';
 import { ILocation } from '../interfaces/location';
 import YardSalesMap from './YardSales/YardSalesMap';
 import YardSalesAdd from './YardSales/YardSalesAdd';
+
+import useAppBarHeight from '../utils/useAppBarHeight'
 
 type Props = {
   signedIn: boolean
@@ -21,6 +22,7 @@ type Props = {
 function YardSales({ signedIn }: Props) {
 
   const theme = useTheme();
+  const headerHeight = useAppBarHeight();
 
   const [location, setLocation] = useState<ILocation>({ latitude: 39.95, longitude: -74.2 });
   const [lackingPermission, setLackingPermission] = useState(false);
@@ -59,7 +61,7 @@ function YardSales({ signedIn }: Props) {
   const mapHeight = '100%';
 
   return (
-    <Box sx={{ height: heights.nonHeaderVH, width: '100%', overflow: 'hidden' }} >
+    <Box sx={{ height: `calc(100vh - ${headerHeight}px)`, width: '100%', overflow: 'hidden' }} >
       <Box sx={{ height: mapHeight, transition: "height 0.1s ease-in" }}>
         <YardSalesMap location={location} setLocation={setLocation} />
       </Box>

@@ -1,13 +1,17 @@
 
 import styled from '@emotion/styled'
 import { colors } from '../styles/colors'
-import { heights } from '../styles/heights'
+import useAppBarHeight from '../utils/useAppBarHeight';
+import { useTheme } from '@mui/material/styles';
+
+
+import Box from '@mui/material/Box'
+import Typography from '@mui/material/Typography'
 
 type Props = {}
 
 const Div = styled.div`
   background-color: ${colors.darkgrey};
-  min-height: ${heights.nonHeaderVH};
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -17,11 +21,23 @@ const Div = styled.div`
 `
 
 function WorkInProgress({ }: Props) {
-    return (
-        <Div>
-            🛠 🛠 🛠 Work In Progress! 🛠 🛠 🛠
-        </Div>
-    )
+
+  const headerHeight = useAppBarHeight();
+  const theme = useTheme();
+
+  return (
+    <Box minHeight={`calc(100vh - ${headerHeight}px)`} sx={{ backgroundColor: theme.palette.primary.main }} display="flex" flexDirection="column">
+      <Box flex={1} textAlign='center' sx={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}>
+        <div>
+          <Typography sx={{ typography: { md: 'h3' } }} variant='h5' color={colors.platinum}> 🛠  Work In Progress! 🛠</Typography>
+        </div>
+      </Box>
+    </Box >
+  )
 }
 
 export default WorkInProgress

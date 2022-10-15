@@ -1,20 +1,14 @@
 import styled from '@emotion/styled'
 import { colors } from '../styles/colors'
-import { heights } from '../styles/heights'
-import { apiUrl } from '../env';
+import useAppBarHeight from '../utils/useAppBarHeight';
+import { useTheme } from '@mui/material/styles';
 
+
+import Box from '@mui/material/Box'
+import Typography from '@mui/material/Typography'
 import Link from '@mui/material/Link';
 import { Link as RouterLink } from 'react-router-dom';
 
-const HomeDiv = styled.div`
-  background-color: ${colors.darkgrey};
-  min-height: ${heights.nonHeaderVH};
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-`
 
 const Main = styled.h1`
   color: ${colors.platinum};
@@ -30,12 +24,24 @@ const Submain = styled.h3`
 `
 
 function Home({ }) {
+
+  const headerHeight = useAppBarHeight();
+  const theme = useTheme();
+
   return (
-    <HomeDiv>
-      <Main> <MainHighlight>Yet A</MainHighlight>nother Marketplace</Main>
-      {/* <Submain> The only marketplace designed for <Link color='secondary' underline="hover" component={RouterLink} to='/developers'>Developers</Link>
-      </Submain> */}
-    </HomeDiv >
+    <Box minHeight={`calc(100vh - ${headerHeight}px)`} sx={{ backgroundColor: theme.palette.primary.main }} display="flex" flexDirection="column">
+      <Box flex={1} textAlign='center' sx={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}>
+        <div>
+          <Typography sx={{ typography: { lg: 'h1', md: 'h2' } }} variant='h3' color={colors.platinum}> <MainHighlight>Yet A</MainHighlight>nother Marketplace</Typography>
+          {/* <Submain> The only marketplace designed for <Link color='secondary' underline="hover" component={RouterLink} to='/developers'>Developers</Link>
+          </Submain> */}
+        </div>
+      </Box>
+    </Box >
   )
 }
 
