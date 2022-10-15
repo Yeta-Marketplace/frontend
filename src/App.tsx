@@ -16,6 +16,7 @@ import Home from './components/Home'
 import PageNotFound from './components/PageNotFound'
 import YardSales from './components/YardSales'
 import WorkInProgress from './components/WorkInProgress';
+import Feedback from './components/Feedback';
 
 function App() {
 
@@ -34,6 +35,7 @@ function App() {
           <Route path="/signin" element={!token ? <Signin setToken={setToken} /> : <Navigate to="/" />} />
           <Route path="/signout" element={<Signout setToken={setToken} />} />
           <Route path="/yardsales" element={<YardSales signedIn={!!token} />} />
+          <Route path="/feedback" element={!!token ? <Feedback token={token} /> : <Navigate to="/signin" />} />
           <Route path="/workinprogress" element={<WorkInProgress />} />
           <Route path="*" element={<PageNotFound />} />
         </Routes>

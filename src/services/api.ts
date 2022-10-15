@@ -2,6 +2,7 @@ import axios, {AxiosError} from 'axios';
 import { apiUrl } from '../env';
 import { IUserProfile, IUserProfileUpdate, IUserProfileCreate, IUserProfileCreateOpen } from '../interfaces/user';
 import { IYardSale, IYardSaleCreate } from '../interfaces/yardsale';
+import { IFeedbackCreate } from '../interfaces/feedback';
 
 function authHeaders(token: string) {
   return {
@@ -66,6 +67,11 @@ export const api = {
     
     async createYardSaleOpen(data: IYardSaleCreate) {
       return axios.post(`${apiUrl}/v1/yardsales/open`, data);
+    },
+
+    // =========================== Feedback ============================
+    async createFeedback(token: string, data: IFeedbackCreate) {
+      return axios.post(`${apiUrl}/v1/feedback`, data, authHeaders(token));
     },
   };
   
