@@ -28,8 +28,8 @@ function YardSalesAdd({ location }: Props) {
     description: '',
     latitude: location.latitude,
     longitude: location.longitude,
-    start_date: new Date(),
-    end_date: new Date(),
+    start_date: new Date().toISOString().slice(0, 10),
+    end_date: new Date().toISOString().slice(0, 10),
   };
 
   const formik = useFormik({

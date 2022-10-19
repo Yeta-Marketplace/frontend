@@ -11,6 +11,6 @@ export interface IYardSaleCreate {
     description: string;
     latitude: number;
     longitude: number;
-    start_date: Date;
-    end_date: Date;
+    start_date: string; // Date;
+    end_date: string; // Date;
 }
