@@ -7,6 +7,7 @@ import Container from '@mui/material/Container'
 import Fab from '@mui/material/Fab';
 import Slide from '@mui/material/Slide';
 import AddIcon from '@mui/icons-material/Add';
+import BackIcon from '@mui/icons-material/ArrowDownward';
 
 import { ILocation } from '../interfaces/location';
 import YardSalesMap from './YardSales/YardSalesMap';
@@ -66,7 +67,16 @@ function YardSales({ signedIn }: Props) {
         <YardSalesMap location={location} setLocation={setLocation} />
       </Box>
       <Fab variant="extended" color="primary" aria-label="add" sx={theme.fab} onClick={handleCreateFormChange}>
-        <AddIcon /> Add Yard Sale
+        {showCreateFrom ? (
+          <>
+            <BackIcon /> Hide Add Form
+          </>
+        ) : (
+          <>
+            <AddIcon /> Add Yard Sale
+          </>
+        )
+        }
       </Fab>
       <Slide direction="up" in={showCreateFrom} mountOnEnter unmountOnExit >
         <Container sx={{ background: 'white', position: 'fixed', bottom: 0, left: 0, right: 0, borderRadius: '25px 25px 0px 0px' }}>
