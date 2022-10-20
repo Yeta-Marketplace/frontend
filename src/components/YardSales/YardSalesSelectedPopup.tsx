@@ -1,33 +1,72 @@
 import { Popup } from 'react-map-gl';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
+import Stack from '@mui/material/Stack';
 import { IYardSale } from '../../interfaces/yardsale'
+import * as moment from 'moment';
 
 type Props = {
-    selectedYardsale: IYardSale,
-    setSelectedYardsale: Function
+  selectedYardsale: IYardSale,
+  setSelectedYardsale: Function
 }
 
 function YardSalesSelectedPopup({ selectedYardsale, setSelectedYardsale }: Props) {
-    return (
-        <Popup
-            latitude={selectedYardsale.latitude}
-            longitude={selectedYardsale.longitude}
-            closeOnClick={false} // TODO: This definitely needs to be looked at
-            onClose={() => setSelectedYardsale(null)}
+
+  const now = moment().format('YYYY-MM-DD');
+
+  let color = null;
+  let status = null;
+  if (moment(selectedYardsale.start_date).isAfter(now)) {
+    // Future YS
+    color = "#ff8000";
+    status = "Future Sale";
+  } else if (moment(selectedYardsale.end_date).isBefore(now)) {
+    // Past YS
+    color = "#a4a4a4";
+    status = "Past Sale";
+  } else {
+    color = "#001fcf";
+    status = "Live!";
+  };
+
+  const startDateMoment = moment(selectedYardsale.start_date).format('MM/DD');
+  const endDateMoment = moment(selectedYardsale.end_date).format('MM/DD');
+
+  return (
+    <Popup
+      latitude={selectedYardsale.latitude}
+      longitude={selectedYardsale.longitude}
+      closeOnClick={false} // TODO: This definitely needs to be looked at
+      onClose={() => setSelectedYardsale(null)}
+    >
+      <Stack spacing={1}>
+
+        <h2>
+          {selectedYardsale.description ? selectedYardsale.description : 'No Name'}
+        </h2>
+
+        <Stack direction='row' alignItems='center' spacing={2}>
+          <Box sx={{ borderRadius: '5px', backgroundColor: color, padding: '2px 6px' }} >
+            <Typography color='white'> {status} </Typography>
+          </Box>
+          {(startDateMoment === endDateMoment) ? (
+            <Typography variant='overline'> {startDateMoment} </Typography>
+          ) : (
+            <Typography variant='overline'> {startDateMoment} - {endDateMoment}</Typography>
+          )
+          }
+        </Stack>
+
+        <a
+          target="_blank"
+          rel="noopener noreferrer"
+          href={"https://www.google.com/maps/search/?api=1&query=" + selectedYardsale.latitude.toString() + "%2C" + selectedYardsale.longitude.toString()}
         >
-            <div>
-                <h2>{selectedYardsale.description}</h2>
-                <p>Start Date: {(new Date(selectedYardsale.start_date)).toDateString()}</p>
-                <p>End Date: {(new Date(selectedYardsale.end_date)).toDateString()}</p>
-                <a
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    href={"https://www.google.com/maps/search/?api=1&query=" + selectedYardsale.latitude.toString() + "%2C" + selectedYardsale.longitude.toString()}
-                >
-                    Open in Google Maps
-                </a>
-            </div>
-        </Popup>
-    )
+          Open in Google Maps
+        </a>
+      </Stack>
+    </Popup >
+  )
 }
 
 export default YardSalesSelectedPopup

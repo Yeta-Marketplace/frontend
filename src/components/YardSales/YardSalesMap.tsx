@@ -6,6 +6,8 @@ import { IYardSale } from '../../interfaces/yardsale';
 import { api } from '../../services/api';
 import { ILocation } from '../../interfaces/location';
 import YardSalesSelectedPopup from './YardSalesSelectedPopup';
+import * as moment from 'moment';
+import { alpha } from "@mui/material";
 
 // import AddYardSaleIcon from '@mui/icons-material/AddBusiness';
 import AddYardSaleIcon from '@mui/icons-material/AddLocationAlt';
@@ -22,7 +24,7 @@ function YardSalesMap({ location, setLocation }: Props) {
 
   useEffect(() => {
     async function getYardsales() {
-      const newYardsales = await api.getYardSales(location.latitude, location.longitude, 1000, 0, 300).then(response => response.data);
+      const newYardsales = await api.getYardSales(location.latitude, location.longitude, 1000, 0, 1000).then(response => response.data);
       setYardsales(newYardsales);
     }
     if (!yardsales.length) {
@@ -31,17 +33,33 @@ function YardSalesMap({ location, setLocation }: Props) {
   }, []);
 
   const yardsaleMarkers = useMemo(() =>
-    yardsales.map(yardsale => (
-      <Marker
+    yardsales.map(yardsale => {
+      const now = moment().format('YYYY-MM-DD');
+      let color = null;
+      let alphaCoeff = 0.5;
+
+      if (moment(yardsale.start_date).isAfter(now)) {
+        // Future YS
+        color = "#fee541";
+      } else if (moment(yardsale.end_date).isBefore(now)) {
+        // Past YS
+        color = "#a4a4a4";
+      } else {
+        alphaCoeff = 1.0;
+        color = "#001fcf";
+      }
+
+      return <Marker
         key={yardsale.id}
         latitude={yardsale.latitude}
         longitude={yardsale.longitude}
-        color="blue"
+        color={alpha(color, alphaCoeff)}
         onClick={e => {
           setSelectedYardsale(yardsale);
         }}
       />
-    )
+
+    }
     ), [yardsales]);
 
   return (
