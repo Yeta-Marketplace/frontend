@@ -6,7 +6,7 @@ import { IYardSale } from '../../interfaces/yardsale';
 import { api } from '../../services/api';
 import { ILocation } from '../../interfaces/location';
 import YardSalesSelectedPopup from './YardSalesSelectedPopup';
-import * as moment from 'moment';
+import moment from 'moment';
 import { alpha } from "@mui/material";
 
 // import AddYardSaleIcon from '@mui/icons-material/AddBusiness';

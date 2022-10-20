@@ -3,7 +3,7 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import { IYardSale } from '../../interfaces/yardsale'
-import * as moment from 'moment';
+import moment from 'moment';
 
 type Props = {
   selectedYardsale: IYardSale,

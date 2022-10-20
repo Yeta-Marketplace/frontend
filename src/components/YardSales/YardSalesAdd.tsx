@@ -14,7 +14,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { useFormik } from 'formik';
 import { useState } from 'react';
 import { Moment } from 'moment';
-import * as moment from 'moment';
+import moment from 'moment';
 
 import { api } from '../../services/api';
 
