@@ -9,9 +9,12 @@ import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import AddYardSaleIcon from '@mui/icons-material/AddLocationAlt';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 import { useFormik } from 'formik';
 import { useState } from 'react';
+import { Moment } from 'moment';
+import * as moment from 'moment';
 
 import { api } from '../../services/api';
 
@@ -23,13 +26,15 @@ function YardSalesAdd({ location }: Props) {
 
   // Use SNACKBAR in the future: https://mui.com/material-ui/react-snackbar/
   const [successMsg, setSuccessMsg] = useState("");
+  const [startDate, setStartDate] = useState<Moment>(moment());
+  const [endDate, setEndDate] = useState<Moment>(moment());
 
   const initialValues: IYardSaleCreate = {
     description: '',
     latitude: location.latitude,
     longitude: location.longitude,
-    start_date: new Date().toISOString().slice(0, 10),
-    end_date: new Date().toISOString().slice(0, 10),
+    start_date: startDate.format('YYYY-MM-DD'),
+    end_date: endDate.format('YYYY-MM-DD'),
   };
 
   const formik = useFormik({
@@ -42,6 +47,33 @@ function YardSalesAdd({ location }: Props) {
       createYardSale();
     },
   });
+
+
+  const handleStartDateChange = (newDate: string | null) => {
+    if (newDate === null) return;
+
+    const newDateMoment = moment(newDate);
+    const newDateString = newDateMoment.format('YYYY-MM-DD');
+
+    formik.values.start_date = newDateString;
+    setStartDate(newDateMoment);
+
+    // Decided to change start date as well, as it feels more intuitive
+    formik.values.end_date = newDateString;
+    setEndDate(newDateMoment);
+  };
+
+
+  const handleEndDateChange = (newDate: string | null) => {
+    if (newDate === null) return;
+
+    const newDateMoment = moment(newDate);
+    const newDateString = newDateMoment.format('YYYY-MM-DD');
+
+    formik.values.end_date = newDateString;
+    setEndDate(newDateMoment);
+  };
+
 
   formik.values.latitude = location.latitude;
   formik.values.longitude = location.longitude;
@@ -62,6 +94,22 @@ function YardSalesAdd({ location }: Props) {
           error={formik.touched.description && Boolean(formik.errors.description)}
           helperText={formik.touched.description && formik.errors.description}
         />
+        <Stack direction="row" spacing={2} mt={2}>
+          <DatePicker
+            disablePast
+            label="Start Date"
+            value={formik.values.start_date}
+            onChange={handleStartDateChange}
+            renderInput={(params) => <TextField style={{ width: "50%", margin: "10px 10px 10px 0px" }} {...params} />}
+          />
+          <DatePicker
+            disablePast
+            label="End Date"
+            value={formik.values.end_date}
+            onChange={handleEndDateChange}
+            renderInput={(params) => <TextField style={{ width: "50%", margin: "10px 10px 10px 0px" }} {...params} />}
+          />
+        </Stack>
         <Typography sx={{ typography: { sm: 'h5', xs: 'body1' } }} m={1} textAlign='left'>Drag <AddYardSaleIcon color='secondary' /> to Change Location</Typography>
         <Stack direction="row" spacing={2}>
           <TextField
