@@ -37,7 +37,7 @@ function App() {
             <Route path="/signup" element={<Signup />} />
             <Route path="/signin" element={!token ? <Signin setToken={setToken} /> : <Navigate to="/" />} />
             <Route path="/signout" element={<Signout setToken={setToken} />} />
-            <Route path="/yardsales" element={<YardSales signedIn={!!token} />} />
+            <Route path="/yardsales" element={<YardSales token={token} />} />
             <Route path="/feedback" element={!!token ? <Feedback token={token} /> : <Navigate to="/signin" />} />
             <Route path="/workinprogress" element={<WorkInProgress />} />
             <Route path="*" element={<PageNotFound />} />

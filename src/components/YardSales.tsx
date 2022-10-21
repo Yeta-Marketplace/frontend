@@ -16,11 +16,11 @@ import YardSalesAdd from './YardSales/YardSalesAdd';
 import useAppBarHeight from '../utils/useAppBarHeight'
 
 type Props = {
-  signedIn: boolean
+  token: string | null
 }
 
 
-function YardSales({ signedIn }: Props) {
+function YardSales({ token }: Props) {
 
   const theme = useTheme();
   const headerHeight = useAppBarHeight();
@@ -80,7 +80,7 @@ function YardSales({ signedIn }: Props) {
       </Fab>
       <Slide direction="up" in={showCreateFrom} mountOnEnter unmountOnExit >
         <Container sx={{ background: 'white', position: 'fixed', bottom: 0, left: 0, right: 0, borderRadius: '25px 25px 0px 0px' }}>
-          <YardSalesAdd location={location} />
+          <YardSalesAdd location={location} token={token} />
         </Container>
       </Slide >
     </Box >

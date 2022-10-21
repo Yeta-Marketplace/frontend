@@ -20,9 +20,10 @@ import { api } from '../../services/api';
 
 type Props = {
   location: ILocation
+  token: string | null
 }
 
-function YardSalesAdd({ location }: Props) {
+function YardSalesAdd({ location, token }: Props) {
 
   // Use SNACKBAR in the future: https://mui.com/material-ui/react-snackbar/
   const [successMsg, setSuccessMsg] = useState("");
@@ -41,7 +42,11 @@ function YardSalesAdd({ location }: Props) {
     initialValues: initialValues,
     onSubmit: (values) => {
       async function createYardSale() {
-        const response = await api.createYardSaleOpen(values);
+        if (!token) {
+          const response = await api.createYardSaleOpen(values);
+        } else {
+          const response = await api.createYardSale(token, values);
+        }
         setSuccessMsg("Yard Sale added Successfully! Refresh page");
       }
       createYardSale();
