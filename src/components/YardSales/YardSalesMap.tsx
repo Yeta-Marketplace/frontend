@@ -68,7 +68,7 @@ function YardSalesMap({ location, setLocation }: Props) {
       reuseMaps
       initialViewState={{
         ...location,
-        zoom: 14
+        zoom: 11
       }}
       mapStyle="mapbox://styles/mapbox/streets-v9"
       mapboxAccessToken={MAPBOX_TOKEN}
