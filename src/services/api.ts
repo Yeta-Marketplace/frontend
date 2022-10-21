@@ -62,7 +62,7 @@ export const api = {
     },
     
     async createYardSale(token: string, data: IYardSaleCreate) {
-      return axios.post(`${apiUrl}/v1/yardsales`, data, authHeaders(token));
+      return axios.post(`${apiUrl}/v1/yardsales/`, data, authHeaders(token));
     },
     
     async createYardSaleOpen(data: IYardSaleCreate) {
