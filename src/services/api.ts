@@ -71,7 +71,7 @@ export const api = {
 
     // =========================== Feedback ============================
     async createFeedback(token: string, data: IFeedbackCreate) {
-      return axios.post(`${apiUrl}/v1/feedback`, data, authHeaders(token));
+      return axios.post(`${apiUrl}/v1/feedback/`, data, authHeaders(token));
     },
   };
   
