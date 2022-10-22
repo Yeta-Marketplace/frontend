@@ -12,7 +12,7 @@ import DevelopersAbout from './components/DevelopersAbout'
 import Signup from './components/Signup'
 import Signin from './components/Signin'
 import Signout from './components/Signout'
-import Home from './components/Home'
+import About from './components/About'
 import PageNotFound from './components/PageNotFound'
 import YardSales from './components/YardSales'
 import WorkInProgress from './components/WorkInProgress';
@@ -32,12 +32,12 @@ function App() {
           <CssBaseline />
           <ResponsiveAppBar signedIn={!!token} />
           <Routes>
-            <Route path="/" element={<Home />} />
+            <Route path="/" element={<YardSales token={token} />} />
+            <Route path="/about" element={<About />} />
             <Route path="/developers" element={<DevelopersAbout />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/signin" element={!token ? <Signin setToken={setToken} /> : <Navigate to="/" />} />
             <Route path="/signout" element={<Signout setToken={setToken} />} />
-            <Route path="/yardsales" element={<YardSales token={token} />} />
             <Route path="/feedback" element={!!token ? <Feedback token={token} /> : <Navigate to="/signin" />} />
             <Route path="/workinprogress" element={<WorkInProgress />} />
             <Route path="*" element={<PageNotFound />} />

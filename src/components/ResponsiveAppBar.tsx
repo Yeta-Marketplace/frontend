@@ -26,8 +26,8 @@ function ResponsiveAppBar({ signedIn }: Props) {
 
   const theme = useTheme();
 
-  const pages = ['Yard Sales', '🛠 Buy 🛠', '🛠 Sell 🛠'];
-  const pagesLinks = ['/yardsales', 'workinprogress', 'workinprogress'];
+  const pages = ['Yard Sales', 'About']; //'🛠 Buy 🛠', '🛠 Sell 🛠'];
+  const pagesLinks = ['/', '/about']; //'workinprogress', 'workinprogress'];
   const settings = ['🛠Dashboard🛠', 'Give Feedback!', 'Sign Out'];
   const settingsLinks = ['/workinprogress', '/feedback', '/signout'];
 
