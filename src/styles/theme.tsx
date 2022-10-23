@@ -42,8 +42,8 @@ theme.fab = {
   bottom: theme.spacing(3),
   right: theme.spacing(3),
   [theme.breakpoints.up('lg')]: {
-    top: theme.spacing(15),
-    right: theme.spacing(10),
+    bottom: theme.spacing(5),
+    right: theme.spacing(5),
   },
 };
 

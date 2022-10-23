@@ -63,9 +63,10 @@ function YardSales({ token }: Props) {
 
   return (
     <Box sx={{ height: `calc(100vh - ${headerHeight}px)`, width: '100%', overflow: 'hidden' }} >
-      <Box sx={{ height: mapHeight, transition: "height 0.1s ease-in" }}>
+      <Box sx={{ height: mapHeight, }}>
         <YardSalesMap location={location} setLocation={setLocation} />
       </Box>
+      {/* Below has absolute positioning */}
       <Fab variant="extended" color="primary" aria-label="add" sx={theme.fab} onClick={handleCreateFormChange}>
         {showCreateFrom ? (
           <>
