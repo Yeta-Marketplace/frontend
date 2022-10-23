@@ -46,6 +46,8 @@ function ResponsiveAppBar({ signedIn }: Props) {
     setAnchorElUser(null);
   };
 
+  // TODO: Fix some weird issue with AnchorEl -> when on yardsales, sign out, then sign in
+
   return (
     <AppBar position="static" >
       <Container maxWidth="xl" >
