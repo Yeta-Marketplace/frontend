@@ -9,18 +9,51 @@ import YardSalesSelectedPopup from './YardSalesSelectedPopup';
 import moment from 'moment';
 import { alpha } from "@mui/material";
 
+import { timeColors } from './Items';
+
 // import AddYardSaleIcon from '@mui/icons-material/AddBusiness';
 import AddYardSaleIcon from '@mui/icons-material/AddLocationAlt';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import {
+  faWarehouse as YardSaleIcon,
+  faGhost as HalloweenIcon,
+  faLocationPin as PinIcon
+} from '@fortawesome/free-solid-svg-icons'
+
+
+type Ghost = {
+  latitude: number,
+  longitude: number
+}
+
+function getRandomInt(max: number) {
+  return Math.floor(Math.random() * max);
+}
+
+function coords(latitude: number, longitude: number, n: number): Ghost[] {
+  const coordinates = Array.from({ length: n }, () => ({
+    latitude: latitude + Math.random() * 2 - 1,
+    longitude: longitude + Math.random() * 2 - 1,
+  }));
+  return coordinates
+}
 
 
 type Props = {
   location: ILocation,
-  setLocation: Function
+  setLocation: Function,
+  pickedEvents: string[],
+  pickedTime: string
 }
 
-function YardSalesMap({ location, setLocation }: Props) {
+function YardSalesMap({ location, setLocation, pickedEvents, pickedTime }: Props) {
+
   const [yardsales, setYardsales] = useState<IYardSale[]>([]);
+  const [ghosts, setGhosts] = useState<Ghost[]>(coords(location.latitude, location.longitude, 10));
+
   const [selectedYardsale, setSelectedYardsale] = useState<IYardSale | null>(null);
+
+  const timedelta = (pickedTime == 'this_week' ? 7 : 0);
 
   useEffect(() => {
     async function getYardsales() {
@@ -34,33 +67,45 @@ function YardSalesMap({ location, setLocation }: Props) {
 
   const yardsaleMarkers = useMemo(() =>
     yardsales.map(yardsale => {
-      const now = moment().format('YYYY-MM-DD');
+      const start = moment().format('YYYY-MM-DD');
+      const end = moment().add(timedelta, 'days').format('YYYY-MM-DD');
       let color = null;
-      let alphaCoeff = 0.5;
 
-      if (moment(yardsale.start_date).isAfter(now)) {
+      if (moment(yardsale.start_date).isAfter(end)) {
         // Future YS
-        color = "#fee541";
-      } else if (moment(yardsale.end_date).isBefore(now)) {
+        color = timeColors['future'];
+      } else if (moment(yardsale.end_date).isBefore(start)) {
         // Past YS
-        color = "#a4a4a4";
+        color = alpha(timeColors['past'], 0.5);
       } else {
-        alphaCoeff = 1.0;
-        color = "#001fcf";
+        color = timeColors['present'];
       }
 
       return <Marker
-        key={yardsale.id}
+        key={yardsale.id + color}
         latitude={yardsale.latitude}
         longitude={yardsale.longitude}
-        color={alpha(color, alphaCoeff)}
+        color={color}
         onClick={e => {
           setSelectedYardsale(yardsale);
         }}
-      />
-
+        anchor='bottom'
+      >
+        <FontAwesomeIcon icon={YardSaleIcon} size='2x' color={color} />
+      </Marker>
     }
-    ), [yardsales]);
+    ), [yardsales, pickedEvents, pickedTime]);
+
+  const ghostMarkers = useMemo(() =>
+    ghosts.map(ghost => {
+      return <Marker
+        key={ghost.latitude + ' ' + ghost.longitude}
+        latitude={ghost.latitude}
+        longitude={ghost.longitude}
+      >
+        <FontAwesomeIcon icon={HalloweenIcon} size='2x' color='white' fade />
+      </Marker>
+    }), [ghosts]);
 
   return (
     <Map
@@ -81,7 +126,10 @@ function YardSalesMap({ location, setLocation }: Props) {
       } />
 
       {/* YARD SALES AROUND YOU */}
-      {yardsaleMarkers}
+      {pickedEvents.includes('yardsales') && yardsaleMarkers}
+
+      {/* ====== FUN ====== */}
+      {pickedEvents.includes('halloween') && ghostMarkers}
 
       {/* SELECTED YARD SALE */}
       {selectedYardsale && YardSalesSelectedPopup({ selectedYardsale, setSelectedYardsale })}

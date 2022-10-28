@@ -3,6 +3,7 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import { IYardSale } from '../../interfaces/yardsale'
+import { timeColors } from './Items'
 import moment from 'moment';
 
 type Props = {
@@ -12,21 +13,23 @@ type Props = {
 
 function YardSalesSelectedPopup({ selectedYardsale, setSelectedYardsale }: Props) {
 
+  // TODO: Use chip for Past/Present/Future featured text https://mui.com/material-ui/react-chip/
+
   const now = moment().format('YYYY-MM-DD');
 
   let color = null;
   let status = null;
   if (moment(selectedYardsale.start_date).isAfter(now)) {
     // Future YS
-    color = "#ff8000";
-    status = "Future Sale";
+    color = timeColors['future'];
+    status = "Future Event";
   } else if (moment(selectedYardsale.end_date).isBefore(now)) {
     // Past YS
-    color = "#a4a4a4";
-    status = "Past Sale";
+    color = timeColors['past'];
+    status = "Past Event";
   } else {
-    color = "#001fcf";
-    status = "Live!";
+    color = timeColors['present'];
+    status = "Today!";
   };
 
   const startDateMoment = moment(selectedYardsale.start_date).format('MM/DD');
