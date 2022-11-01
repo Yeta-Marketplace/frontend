@@ -28,8 +28,8 @@ function ResponsiveAppBar({ signedIn }: Props) {
 
   const pages = ['Yard Sales', 'About']; //'🛠 Buy 🛠', '🛠 Sell 🛠'];
   const pagesLinks = ['/', '/about']; //'workinprogress', 'workinprogress'];
-  const settings = ['🛠Dashboard🛠', 'Give Feedback!', 'Sign Out'];
-  const settingsLinks = ['/workinprogress', '/feedback', '/signout'];
+  const settings = ['Give Feedback!', 'Sign Out']; // '🛠Dashboard🛠',
+  const settingsLinks = ['/feedback', '/signout']; // '/workinprogress', 
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
