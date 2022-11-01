@@ -17,7 +17,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
   faWarehouse as YardSaleIcon,
   faGhost as HalloweenIcon,
-  faLocationPin as PinIcon
+  faLocationPin as PinIcon,
 } from '@fortawesome/free-solid-svg-icons'
 
 
@@ -91,7 +91,11 @@ function YardSalesMap({ location, setLocation, pickedEvents, pickedTime }: Props
         }}
         anchor='bottom'
       >
-        <FontAwesomeIcon icon={YardSaleIcon} size='2x' color={color} />
+        <span className="fa-layers fa-fw" >
+          <FontAwesomeIcon icon={PinIcon} size='4x' color={color} />
+          <FontAwesomeIcon icon={PinIcon} size='3x' inverse transform="right-2 up-0.5" />
+          <FontAwesomeIcon icon={YardSaleIcon} size='lg' transform="right-8.7 up-6" color={color} />
+        </span>
       </Marker>
     }
     ), [yardsales, pickedEvents, pickedTime]);
