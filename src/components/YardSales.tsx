@@ -11,9 +11,9 @@ import AddIcon from '@mui/icons-material/Add';
 import BackIcon from '@mui/icons-material/ArrowDownward';
 
 import { ILocation } from '../interfaces/location';
-import YardSalesMap from './YardSales/YardSalesMap';
-import YardSalesAdd from './YardSales/YardSalesAdd';
-import YardSalesIcons from './YardSales/YardSalesIcons';
+import YardSalesMap from './YardSales/Map';
+import YardSalesAdd from './YardSales/Add';
+import YardSalesIcons from './YardSales/Icons';
 import { events, times } from './YardSales/Items'
 
 type Props = {

@@ -5,7 +5,7 @@ import { MAPBOX_TOKEN } from '../../env'
 import { IYardSale } from '../../interfaces/yardsale';
 import { api } from '../../services/api';
 import { ILocation } from '../../interfaces/location';
-import YardSalesSelectedPopup from './YardSalesSelectedPopup';
+import YardSalesSelectedPopup from './SelectedPopup';
 import moment from 'moment';
 import { alpha } from "@mui/material";
 
