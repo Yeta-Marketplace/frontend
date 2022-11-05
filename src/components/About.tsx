@@ -23,7 +23,7 @@ function About({ }: Props) {
 
   return (
     <Container sx={{ height: `calc(100vh - ${headerHeight}px)`, }}>
-      <Stack spacing={8} mt={10}>
+      <Stack spacing={8} pt={10}>
         <Stack spacing={3} textAlign='center'>
           <Typography variant='h2' textAlign='center'> What is <MainHighlight>YetA</MainHighlight>?</Typography>
           <Typography variant='body1' sx={{ fontSize: '2rem' }}> <MainHighlight>YetA </MainHighlight>
