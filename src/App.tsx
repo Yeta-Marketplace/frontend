@@ -19,10 +19,23 @@ import WorkInProgress from './components/WorkInProgress';
 import Feedback from './components/Feedback';
 import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
 import { LocalizationProvider } from '@mui/x-date-pickers';
+import { apiUrl } from './env'
+
+import { OpenAPI } from './services/client'
+OpenAPI.BASE = apiUrl;
+
 
 function App() {
 
   const { token, setToken } = useToken();
+
+  if (!!token) {
+    OpenAPI.TOKEN = token;
+    OpenAPI.CREDENTIALS = "include";
+  } else {
+    OpenAPI.CREDENTIALS = "omit";
+  }
+
 
   return (
     <LocalizationProvider dateAdapter={AdapterMoment}>
