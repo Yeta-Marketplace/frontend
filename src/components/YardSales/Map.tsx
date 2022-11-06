@@ -48,8 +48,13 @@ type Props = {
 
 function YardSalesMap({ location, setLocation, pickedEvents, pickedTime }: Props) {
 
+  const [viewState, setViewState] = useState({
+    ...location,
+    zoom: 11
+  });
+
   const [yardsales, setYardsales] = useState<IYardSale[]>([]);
-  const [ghosts, setGhosts] = useState<Ghost[]>(coords(location.latitude, location.longitude, 10));
+  const ghosts = useMemo<Ghost[]>(() => coords(location.latitude, location.longitude, 10), [location]);
 
   const [selectedYardsale, setSelectedYardsale] = useState<IYardSale | null>(null);
 
@@ -113,20 +118,17 @@ function YardSalesMap({ location, setLocation, pickedEvents, pickedTime }: Props
 
   return (
     <Map
+      {...viewState}
       style={{ height: '100%' }}
       reuseMaps
-      initialViewState={{
-        ...location,
-        zoom: 11
-      }}
+      onMove={evt => setViewState(evt.viewState)}
       mapStyle="mapbox://styles/mapbox/streets-v9"
       mapboxAccessToken={MAPBOX_TOKEN}
       onClick={e => { setLocation({ latitude: e.lngLat.lat, longitude: e.lngLat.lng }); }}
     >
       <NavigationControl />
-      <GeolocateControl onGeolocate={e => {
-        setLocation({ latitude: e.coords.latitude, longitude: e.coords.longitude });
-      }
+      <GeolocateControl onGeolocate={e =>
+        setLocation({ latitude: e.coords.latitude, longitude: e.coords.longitude })
       } />
 
       {/* YARD SALES AROUND YOU */}
