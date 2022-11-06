@@ -4,22 +4,22 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import Container from '@mui/material/Container'
 import TextField from '@mui/material/TextField';
-import Button from '@mui/material/Button';
+import LoadingButton from '@mui/lab/LoadingButton';
 import Alert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
 import Typography from '@mui/material/Typography';
 
 
-import { api } from '../services/api'
 import { IFeedbackCreate } from '../interfaces/feedback';
 
-type Props = {
-  token: string
-}
+import { FeedbackService } from '../services/client'
 
-function Feedback({ token }: Props) {
+type Props = {}
+
+function Feedback({ }: Props) {
 
   const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
     if (reason === 'clickaway') {
@@ -43,9 +43,11 @@ function Feedback({ token }: Props) {
     validationSchema: validationSchema,
     onSubmit: (data) => {
       async function createFeedback() {
-        const response = await api.createFeedback(token, data);
-        formik.resetForm();
-        setOpenSnackbar(true);
+        setLoading(true);
+        const response = await FeedbackService.submitFeedback(data).then(_ => {
+          formik.resetForm();
+          setOpenSnackbar(true);
+        }).finally(() => setLoading(false));
       }
       createFeedback();
     },
@@ -68,7 +70,9 @@ function Feedback({ token }: Props) {
           multiline
           minRows={12}
         />
-        <Button
+        <LoadingButton
+          loading={loading}
+          // loadingIndicator="Sending..."
           color="secondary"
           variant="contained"
           fullWidth
@@ -77,7 +81,7 @@ function Feedback({ token }: Props) {
           sx={{ mt: 1, mb: 12 }}
         >
           Submit
-        </Button>
+        </LoadingButton>
       </form>
 
       <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'left' }} open={openSnackbar} autoHideDuration={10000} onClose={handleClose}>

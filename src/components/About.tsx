@@ -19,6 +19,7 @@ const MainHighlight = styled.mark`
 type Props = {}
 
 function About({ }: Props) {
+
   const headerHeight = useAppBarHeight();
 
   return (
