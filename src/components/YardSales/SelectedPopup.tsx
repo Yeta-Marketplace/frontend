@@ -2,12 +2,13 @@ import { Popup } from 'react-map-gl';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
-import { IYardSale } from '../../interfaces/yardsale'
 import { timeColors } from './Items'
 import moment from 'moment';
 
+import { YardSaleRead } from '../../services/client'
+
 type Props = {
-  selectedYardsale: IYardSale,
+  selectedYardsale: YardSaleRead,
   setSelectedYardsale: Function
 }
 

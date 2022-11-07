@@ -2,8 +2,6 @@
 import Map, { Marker, GeolocateControl, NavigationControl } from 'react-map-gl';
 import { useEffect, useMemo, useState } from 'react';
 import { MAPBOX_TOKEN } from '../../env'
-import { IYardSale } from '../../interfaces/yardsale';
-import { api } from '../../services/api';
 import { ILocation } from '../../interfaces/location';
 import YardSalesSelectedPopup from './SelectedPopup';
 import moment from 'moment';
@@ -19,6 +17,8 @@ import {
   faGhost as HalloweenIcon,
   faLocationPin as PinIcon,
 } from '@fortawesome/free-solid-svg-icons'
+
+import { YardsalesService, YardSaleRead } from '../../services/client'
 
 
 type Ghost = {
@@ -53,16 +53,16 @@ function YardSalesMap({ location, setLocation, pickedEvents, pickedTime }: Props
     zoom: 11
   });
 
-  const [yardsales, setYardsales] = useState<IYardSale[]>([]);
+  const [yardsales, setYardsales] = useState<YardSaleRead[]>([]);
   const ghosts = useMemo<Ghost[]>(() => coords(location.latitude, location.longitude, 10), [location]);
 
-  const [selectedYardsale, setSelectedYardsale] = useState<IYardSale | null>(null);
+  const [selectedYardsale, setSelectedYardsale] = useState<YardSaleRead | null>(null);
 
   const timedelta = (pickedTime == 'this_week' ? 7 : 0);
 
   useEffect(() => {
     async function getYardsales() {
-      const newYardsales = await api.getYardSales(location.latitude, location.longitude, 1000, 0, 1000).then(response => response.data);
+      const newYardsales = await YardsalesService.readYardsales(location.latitude, location.longitude, 1000, 0, 1000);
       setYardsales(newYardsales);
     }
     if (!yardsales.length) {
