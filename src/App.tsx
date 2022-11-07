@@ -36,7 +36,6 @@ function App() {
     OpenAPI.CREDENTIALS = "omit";
   }
 
-
   return (
     <LocalizationProvider dateAdapter={AdapterMoment}>
       <ThemeProvider theme={theme}>

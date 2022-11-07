@@ -1,6 +1,5 @@
 
 import { ILocation } from '../../interfaces/location';
-import { IYardSaleCreate } from '../../interfaces/yardsale'
 
 import Alert from '@mui/material/Alert';
 import Container from '@mui/material/Container';
@@ -16,7 +15,8 @@ import { useState } from 'react';
 import { Moment } from 'moment';
 import moment from 'moment';
 
-import { api } from '../../services/api';
+import { YardsalesService, YardSaleCreate } from '../../services/client'
+
 
 type Props = {
   location: ILocation
@@ -30,7 +30,7 @@ function YardSalesAdd({ location, token }: Props) {
   const [startDate, setStartDate] = useState<Moment>(moment());
   const [endDate, setEndDate] = useState<Moment>(moment());
 
-  const initialValues: IYardSaleCreate = {
+  const initialValues: YardSaleCreate = {
     description: '',
     latitude: location.latitude,
     longitude: location.longitude,
@@ -43,9 +43,9 @@ function YardSalesAdd({ location, token }: Props) {
     onSubmit: (values) => {
       async function createYardSale() {
         if (!token) {
-          const response = await api.createYardSaleOpen(values);
+          await YardsalesService.createYardsaleOpen(values);
         } else {
-          const response = await api.createYardSale(token, values);
+          await YardsalesService.createYardsale(values);
         }
         setSuccessMsg("Yard Sale added Successfully! Refresh page");
       }
