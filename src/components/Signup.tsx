@@ -9,9 +9,9 @@ import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import Alert from '@mui/material/Alert';
 
-import { api } from '../services/api'
-import { IUserProfileCreateOpen } from '../interfaces/user';
-import { ApiError } from '../interfaces/api';
+import { UsersService } from '../services/client'
+import { ApiError } from '../services/client';
+import type { Body_users_create_user_open } from '../services/client/models/Body_users_create_user_open';
 
 type Props = {}
 
@@ -21,7 +21,7 @@ const Signup = ({ }: Props) => {
 
   const navigate = useNavigate();
 
-  const initialValues: IUserProfileCreateOpen = {
+  const initialValues: Body_users_create_user_open = {
     full_name: "",
     email: "",
     password: ""
@@ -32,28 +32,25 @@ const Signup = ({ }: Props) => {
     //   validationSchema: validationSchema,
     onSubmit: (values) => {
       async function createUserOpen() {
-        const response = await api.createUserOpen(values)
-          .then(response => {
-            const user = response.data;
+        await UsersService.createUserOpen(values).then(
+          () => {
             setErrorMsg("");
             setSuccessMsg("User Created Successfully! Redirecting to Sign In...");
 
             setTimeout(() => {
               navigate('/signin')
             }, 3000);
-          })
-          .catch((error) => {
-            if (axios.isAxiosError(error)) {
-              try {
-                const data = error.response?.data as ApiError;
-                setErrorMsg(data.detail);
-              } catch (e) {
-                setErrorMsg(`Unexpected error: error.message`);
-              }
-            } else {
-              setErrorMsg(`Unexpected error: ${error.message}`);
+          }
+        ).catch(
+          reason => {
+            try {
+              const error = reason as ApiError;
+              setErrorMsg(error.body.detail);
+            } catch (e) {
+              setErrorMsg(`Unexpected error! Please let us know what happened`);
             }
-          });
+          }
+        )
       }
       createUserOpen();
     },
