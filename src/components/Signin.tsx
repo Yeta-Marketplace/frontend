@@ -11,8 +11,8 @@ import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import Alert from '@mui/material/Alert';
 
-import { api } from '../services/api'
 import { IUserSignin } from '../interfaces/user';
+import { LoginService } from '../services/client'
 
 type Props = {
   setToken: Function
@@ -32,15 +32,11 @@ const Signin = ({ setToken }: Props) => {
     //   validationSchema: validationSchema,
     onSubmit: (values) => {
       async function signinUser() {
-        await api.logInGetToken(values.email, values.password).then(
-          token => {
-            if (token) {
-              setToken(token);
-            } else {
-              setErrorMsg("Invalid Email/Password");
-            }
-          }
-        );
+        await LoginService.loginAccessToken({ username: values.email, password: values.password }).then(
+          token => setToken(token)
+        ).catch(
+          error => setErrorMsg("Invalid Email/Password")
+        )
       }
       signinUser();
     },
