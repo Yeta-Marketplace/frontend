@@ -33,7 +33,7 @@ const Signin = ({ setToken }: Props) => {
     onSubmit: (values) => {
       async function signinUser() {
         await LoginService.loginAccessToken({ username: values.email, password: values.password }).then(
-          token => setToken(token)
+          token => setToken(token.access_token)
         ).catch(
           error => setErrorMsg("Invalid Email/Password")
         )
