@@ -1,6 +1,9 @@
 
 import { ILocation } from '../../interfaces/location';
 
+import { Link as RouterLink } from 'react-router-dom';
+import Link from '@mui/material/Link';
+
 import Alert from '@mui/material/Alert';
 import Container from '@mui/material/Container';
 import Stack from '@mui/material/Stack';
@@ -86,71 +89,86 @@ function YardSalesAdd({ location, signedIn, addYardsale }: Props) {
     <Container>
       {successMsg && <Alert severity="success"> {successMsg} </Alert>}
       {/* TODO: Make below smaller on phones */}
-      <Typography sx={{ typography: { sm: 'h2', xs: 'h4' } }} m={2} mt={4} textAlign='center' color='secondary' fontWeight='500'>Add Yard Sale!</Typography>
-      <form onSubmit={formik.handleSubmit}>
-        <TextField
-          fullWidth
-          id="description"
-          name="description"
-          label="Description"
-          value={formik.values.description}
-          onChange={formik.handleChange}
-          error={formik.touched.description && Boolean(formik.errors.description)}
-          helperText={formik.touched.description && formik.errors.description}
-        />
-        <Stack direction="row" spacing={2} mt={2}>
-          <DatePicker
-            disablePast
-            label="Start Date"
-            value={formik.values.start_date}
-            onChange={handleStartDateChange}
-            renderInput={(params) => <TextField style={{ width: "50%", margin: "10px 10px 10px 0px" }} {...params} />}
-          />
-          <DatePicker
-            disablePast
-            label="End Date"
-            value={formik.values.end_date}
-            onChange={handleEndDateChange}
-            renderInput={(params) => <TextField style={{ width: "50%", margin: "10px 10px 10px 0px" }} {...params} />}
-          />
-        </Stack>
-        <Typography sx={{ typography: { sm: 'h5', xs: 'body1' } }} m={1} textAlign='left'>Drag <AddYardSaleIcon color='secondary' /> to Change Location</Typography>
-        <Stack direction="row" spacing={2}>
+
+      <Typography
+        sx={{ typography: { sm: 'h2', xs: 'h4' } }}
+        m={2} mt={4} textAlign='center' color='secondary' fontWeight='500'
+      >
+        {
+          signedIn
+            ? <>Add Yard Sale!</>
+            : <><Link component={RouterLink} to='/signin' color='secondary'>Sign In</Link> to Add</>
+        }
+
+      </Typography>
+
+      <fieldset disabled={!signedIn} style={{ border: '0px', padding: '0px' }}>
+
+        <form onSubmit={formik.handleSubmit}>
           <TextField
             fullWidth
-            style={{ width: "50%", margin: "10px 10px 10px 0px" }}
-            id="latitude"
-            name="latitude"
-            label="Latitude"
-            type="latitude"
-            value={formik.values.latitude}
-            error={formik.touched.latitude && Boolean(formik.errors.latitude)}
-            helperText={formik.touched.latitude && formik.errors.latitude}
+            id="description"
+            name="description"
+            label="Description"
+            value={formik.values.description}
+            onChange={formik.handleChange}
+            error={formik.touched.description && Boolean(formik.errors.description)}
+            helperText={formik.touched.description && formik.errors.description}
           />
-          <TextField
+          <Stack direction="row" spacing={2} mt={2}>
+            <DatePicker
+              disablePast
+              label="Start Date"
+              value={formik.values.start_date}
+              onChange={handleStartDateChange}
+              renderInput={(params) => <TextField style={{ width: "50%", margin: "10px 10px 10px 0px" }} {...params} />}
+            />
+            <DatePicker
+              disablePast
+              label="End Date"
+              value={formik.values.end_date}
+              onChange={handleEndDateChange}
+              renderInput={(params) => <TextField style={{ width: "50%", margin: "10px 10px 10px 0px" }} {...params} />}
+            />
+          </Stack>
+          <Typography sx={{ typography: { sm: 'h5', xs: 'body1' } }} m={1} textAlign='left'>Drag <AddYardSaleIcon color='secondary' /> to Change Location</Typography>
+          <Stack direction="row" spacing={2}>
+            <TextField
+              fullWidth
+              style={{ width: "50%", margin: "10px 10px 10px 0px" }}
+              id="latitude"
+              name="latitude"
+              label="Latitude"
+              type="latitude"
+              value={formik.values.latitude}
+              error={formik.touched.latitude && Boolean(formik.errors.latitude)}
+              helperText={formik.touched.latitude && formik.errors.latitude}
+            />
+            <TextField
+              fullWidth
+              style={{ width: "50%", margin: "10px 0px 10px 0px" }}
+              id="longitude"
+              name="longitude"
+              label="Longitude"
+              type="longitude"
+              value={formik.values.longitude}
+              error={formik.touched.longitude && Boolean(formik.errors.longitude)}
+              helperText={formik.touched.longitude && formik.errors.longitude}
+            />
+          </Stack>
+          {/* Date Picker Integration https://mui.com/x/react-date-pickers/getting-started/ */}
+          <Button
+            color="primary"
+            variant="contained"
             fullWidth
-            style={{ width: "50%", margin: "10px 0px 10px 0px" }}
-            id="longitude"
-            name="longitude"
-            label="Longitude"
-            type="longitude"
-            value={formik.values.longitude}
-            error={formik.touched.longitude && Boolean(formik.errors.longitude)}
-            helperText={formik.touched.longitude && formik.errors.longitude}
-          />
-        </Stack>
-        {/* Date Picker Integration https://mui.com/x/react-date-pickers/getting-started/ */}
-        <Button
-          color="primary"
-          variant="contained"
-          fullWidth
-          type="submit"
-          size='large'
-          sx={{ mt: 1, mb: 12 }}
-        >
-          Submit
-        </Button>
-      </form>
+            type="submit"
+            size='large'
+            sx={{ mt: 1, mb: 12 }}
+          >
+            Submit
+          </Button>
+        </form>
+      </fieldset>
     </Container>
   )
 }
