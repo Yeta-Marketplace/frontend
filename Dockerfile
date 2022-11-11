@@ -4,9 +4,11 @@ FROM node:alpine as build-stage
 
 WORKDIR /app
 
-COPY ./ /app/
-
+# We copy package.json first to help with caching npm install
+COPY package.json /app
 RUN npm install
+
+COPY ./ /app/
 
 RUN npm run build
 

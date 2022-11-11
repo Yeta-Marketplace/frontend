@@ -1,6 +1,6 @@
 
 import Map, { Marker, GeolocateControl, NavigationControl } from 'react-map-gl';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { MAPBOX_TOKEN } from '../../env'
 import { ILocation } from '../../interfaces/location';
 import YardSalesSelectedPopup from './SelectedPopup';
