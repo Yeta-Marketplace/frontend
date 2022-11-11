@@ -19,11 +19,11 @@ import { events, times } from './YardSales/Items'
 import { YardsalesService, YardSaleRead } from '../services/client'
 
 type Props = {
-  token: string | null
+  signedIn: boolean
 }
 
 
-function YardSales({ token }: Props) {
+function YardSales({ signedIn }: Props) {
 
   const theme = useTheme();
   const headerHeight = useAppBarHeight();
@@ -108,7 +108,7 @@ function YardSales({ token }: Props) {
       {/* ============ Add Form ============== */}
       <Slide direction="up" in={showCreateFrom} mountOnEnter unmountOnExit >
         <Container sx={{ background: 'white', position: 'fixed', bottom: 0, left: 0, right: 0, borderRadius: '25px 25px 0px 0px' }}>
-          <YardSalesAdd location={location} token={token} addYardsale={addYardsale} />
+          <YardSalesAdd location={location} signedIn={signedIn} addYardsale={addYardsale} />
         </Container>
       </Slide >
     </Box >

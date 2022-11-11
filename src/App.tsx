@@ -29,7 +29,9 @@ function App() {
 
   const { token, setToken } = useToken();
 
-  if (!!token) {
+  const signedIn = !!token;
+
+  if (signedIn) {
     OpenAPI.TOKEN = token;
     OpenAPI.CREDENTIALS = "include";
   } else {
@@ -42,15 +44,15 @@ function App() {
         <BrowserRouter>
           <GlobalStyles />
           <CssBaseline />
-          <ResponsiveAppBar signedIn={!!token} />
+          <ResponsiveAppBar signedIn={signedIn} />
           <Routes>
-            <Route path="/" element={<YardSales token={token} />} />
+            <Route path="/" element={<YardSales signedIn={signedIn} />} />
             <Route path="/about" element={<About />} />
             <Route path="/developers" element={<DevelopersAbout />} />
             <Route path="/signup" element={<Signup />} />
-            <Route path="/signin" element={!token ? <Signin setToken={setToken} /> : <Navigate to="/" />} />
+            <Route path="/signin" element={signedIn ? <Navigate to="/" /> : <Signin setToken={setToken} />} />
             <Route path="/signout" element={<Signout setToken={setToken} />} />
-            <Route path="/feedback" element={!!token ? <Feedback /> : <Navigate to="/signin" />} />
+            <Route path="/feedback" element={signedIn ? <Feedback /> : <Navigate to="/signin" />} />
             <Route path="/workinprogress" element={<WorkInProgress />} />
             <Route path="*" element={<PageNotFound />} />
           </Routes>
