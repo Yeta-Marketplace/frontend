@@ -18,16 +18,13 @@ import {
   faLocationPin as PinIcon,
 } from '@fortawesome/free-solid-svg-icons'
 
-import { YardsalesService, YardSaleRead } from '../../services/client'
+import { YardSaleRead } from '../../services/client'
+import { Point as MapboxPoint } from 'mapbox-gl';
 
 
 type Ghost = {
   latitude: number,
   longitude: number
-}
-
-function getRandomInt(max: number) {
-  return Math.floor(Math.random() * max);
 }
 
 function coords(latitude: number, longitude: number, n: number): Ghost[] {
@@ -36,6 +33,10 @@ function coords(latitude: number, longitude: number, n: number): Ghost[] {
     longitude: longitude + Math.random() * 2 - 1,
   }));
   return coordinates
+}
+
+function computeScaleFromZoom(zoom: number): number {
+  return Math.max(0.5, Math.min(Math.floor(zoom) / 10, 1));
 }
 
 
@@ -57,6 +58,8 @@ function YardSalesMap({ location, setLocation, pickedEvents, pickedTime, yardsal
   const ghosts = useMemo<Ghost[]>(() => coords(location.latitude, location.longitude, 10), [location]);
   const [selectedYardsale, setSelectedYardsale] = useState<YardSaleRead | null>(null);
 
+  const scale = computeScaleFromZoom(viewState.zoom);
+
   const timedelta = (pickedTime == 'this_week' ? 7 : 0);
 
   const yardsaleMarkers = useMemo(() =>
@@ -75,6 +78,8 @@ function YardSalesMap({ location, setLocation, pickedEvents, pickedTime, yardsal
         color = timeColors['present'];
       }
 
+      const offset = new MapboxPoint(-12, -28);
+
       return <Marker
         key={yardsale.id + color}
         latitude={yardsale.latitude}
@@ -83,16 +88,18 @@ function YardSalesMap({ location, setLocation, pickedEvents, pickedTime, yardsal
         onClick={e => {
           setSelectedYardsale(yardsale);
         }}
-        anchor='bottom'
+        offset={offset.mult(scale)}  // Manual hack to properly align markers
       >
-        <span className="fa-layers fa-fw" >
+        <span className="fa-layers fa-fw "
+          style={{ transform: `scale(${scale})` }}
+        >
           <FontAwesomeIcon icon={PinIcon} size='4x' color={color} />
           <FontAwesomeIcon icon={PinIcon} size='3x' inverse transform="right-2 up-0.5" />
           <FontAwesomeIcon icon={YardSaleIcon} size='lg' transform="right-8.7 up-6" color={color} />
         </span>
       </Marker>
     }
-    ), [yardsales, pickedEvents, pickedTime]);
+    ), [yardsales, scale, pickedEvents, pickedTime]);
 
   const ghostMarkers = useMemo(() =>
     ghosts.map(ghost => {
