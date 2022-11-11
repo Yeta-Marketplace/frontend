@@ -16,6 +16,8 @@ import YardSalesAdd from './YardSales/Add';
 import YardSalesIcons from './YardSales/Icons';
 import { events, times } from './YardSales/Items'
 
+import { YardsalesService, YardSaleRead } from '../services/client'
+
 type Props = {
   token: string | null
 }
@@ -36,6 +38,22 @@ function YardSales({ token }: Props) {
   // TODO: Utilize status field
   const [status, setStatus] = useState<string | null>(null);
   const [showCreateFrom, setShowCreateForm] = useState(false);
+
+  const [yardsales, setYardsales] = useState<YardSaleRead[]>([]);
+
+  useEffect(() => {
+    async function getYardsales() {
+      const newYardsales = await YardsalesService.readYardsales(location.latitude, location.longitude, 1000, 0, 1000);
+      setYardsales(newYardsales);
+    }
+    if (!yardsales.length) {
+      getYardsales();
+    }
+  }, []);
+
+  const addYardsale = (yardsale: YardSaleRead) => {
+    setYardsales([...yardsales, yardsale]);
+  };
 
   const handleCreateFormChange = () => {
     setShowCreateForm((prev) => !prev);
@@ -72,7 +90,7 @@ function YardSales({ token }: Props) {
         <YardSalesIcons pickedEvents={pickedEvents} setEvents={setEvents} pickedTime={pickedTime} setTime={setTime} />
       </Box>
       <Box sx={{ height: `100%`, }}>
-        <YardSalesMap location={location} setLocation={setLocation} pickedEvents={pickedEvents} pickedTime={pickedTime} />
+        <YardSalesMap location={location} setLocation={setLocation} pickedEvents={pickedEvents} pickedTime={pickedTime} yardsales={yardsales} />
       </Box>
 
       {/* ================ Below has absolute positioning ======================= */}
@@ -90,7 +108,7 @@ function YardSales({ token }: Props) {
       {/* ============ Add Form ============== */}
       <Slide direction="up" in={showCreateFrom} mountOnEnter unmountOnExit >
         <Container sx={{ background: 'white', position: 'fixed', bottom: 0, left: 0, right: 0, borderRadius: '25px 25px 0px 0px' }}>
-          <YardSalesAdd location={location} token={token} />
+          <YardSalesAdd location={location} token={token} addYardsale={addYardsale} />
         </Container>
       </Slide >
     </Box >

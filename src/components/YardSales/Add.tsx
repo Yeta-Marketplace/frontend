@@ -20,10 +20,11 @@ import { YardsalesService, YardSaleCreate } from '../../services/client'
 
 type Props = {
   location: ILocation
-  token: string | null
+  token: string | null,
+  addYardsale: Function
 }
 
-function YardSalesAdd({ location, token }: Props) {
+function YardSalesAdd({ location, token, addYardsale }: Props) {
 
   // Use SNACKBAR in the future: https://mui.com/material-ui/react-snackbar/
   const [successMsg, setSuccessMsg] = useState("");
@@ -42,12 +43,10 @@ function YardSalesAdd({ location, token }: Props) {
     initialValues: initialValues,
     onSubmit: (values) => {
       async function createYardSale() {
-        if (!token) {
-          await YardsalesService.createYardsaleOpen(values);
-        } else {
-          await YardsalesService.createYardsale(values);
-        }
-        setSuccessMsg("Yard Sale added Successfully! Refresh page");
+        const newYardsale = (!token) ? await YardsalesService.createYardsaleOpen(values) : await YardsalesService.createYardsale(values);
+        addYardsale(newYardsale);
+        setSuccessMsg("Yard Sale added Successfully! ");
+        formik.values = initialValues;
       }
       createYardSale();
     },

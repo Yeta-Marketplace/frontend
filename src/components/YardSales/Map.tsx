@@ -43,32 +43,21 @@ type Props = {
   location: ILocation,
   setLocation: Function,
   pickedEvents: string[],
-  pickedTime: string
+  pickedTime: string,
+  yardsales: YardSaleRead[]
 }
 
-function YardSalesMap({ location, setLocation, pickedEvents, pickedTime }: Props) {
+function YardSalesMap({ location, setLocation, pickedEvents, pickedTime, yardsales }: Props) {
 
   const [viewState, setViewState] = useState({
     ...location,
     zoom: 11
   });
 
-  const [yardsales, setYardsales] = useState<YardSaleRead[]>([]);
   const ghosts = useMemo<Ghost[]>(() => coords(location.latitude, location.longitude, 10), [location]);
-
   const [selectedYardsale, setSelectedYardsale] = useState<YardSaleRead | null>(null);
 
   const timedelta = (pickedTime == 'this_week' ? 7 : 0);
-
-  useEffect(() => {
-    async function getYardsales() {
-      const newYardsales = await YardsalesService.readYardsales(location.latitude, location.longitude, 1000, 0, 1000);
-      setYardsales(newYardsales);
-    }
-    if (!yardsales.length) {
-      getYardsales();
-    }
-  }, []);
 
   const yardsaleMarkers = useMemo(() =>
     yardsales.map(yardsale => {
