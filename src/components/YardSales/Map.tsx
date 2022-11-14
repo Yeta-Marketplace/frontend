@@ -1,6 +1,6 @@
 
 import Map, { Marker, GeolocateControl, NavigationControl } from 'react-map-gl';
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { MAPBOX_TOKEN } from '../../env'
 import { ILocation } from '../../interfaces/location';
 import YardSalesSelectedPopup from './SelectedPopup';
@@ -43,17 +43,22 @@ function computeScaleFromZoom(zoom: number): number {
 type Props = {
   location: ILocation,
   setLocation: Function,
+  loadedLocation: boolean,
   pickedEvents: string[],
   pickedTime: string,
   yardsales: YardSaleRead[]
 }
 
-function YardSalesMap({ location, setLocation, pickedEvents, pickedTime, yardsales }: Props) {
+function YardSalesMap({ location, setLocation, loadedLocation, pickedEvents, pickedTime, yardsales }: Props) {
 
   const [viewState, setViewState] = useState({
     ...location,
     zoom: 11
   });
+
+  useEffect(() => {
+    setViewState({ ...location, zoom: viewState.zoom });
+  }, [loadedLocation])
 
   const ghosts = useMemo<Ghost[]>(() => coords(location.latitude, location.longitude, 10), [location]);
   const [selectedYardsale, setSelectedYardsale] = useState<YardSaleRead | null>(null);

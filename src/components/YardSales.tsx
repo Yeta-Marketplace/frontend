@@ -43,13 +43,11 @@ function YardSales({ signedIn }: Props) {
 
   useEffect(() => {
     async function getYardsales() {
-      const newYardsales = await YardsalesService.readYardsales(location.latitude, location.longitude, 1000, 0, 1000);
+      const newYardsales = await YardsalesService.readYardsales(location.latitude, location.longitude, 100, 0, 50);
       setYardsales(newYardsales);
     }
-    if (!yardsales.length) {
-      getYardsales();
-    }
-  }, []);
+    getYardsales();
+  }, [loadedLocation]);
 
   const addYardsale = (yardsale: YardSaleRead) => {
     setYardsales([...yardsales, yardsale]);
@@ -67,6 +65,7 @@ function YardSales({ signedIn }: Props) {
       navigator.geolocation.getCurrentPosition((position) => {
         setStatus(null);
         setLocation({ latitude: position.coords.latitude, longitude: position.coords.longitude });
+        setLoadedLocation(true);
       }, () => {
         setStatus('Unable to retrieve your location. Please check your permissions');
         setLackingPermission(true);
@@ -79,7 +78,6 @@ function YardSales({ signedIn }: Props) {
   useEffect(() => {
     if (!lackingPermission && !loadedLocation) {
       getLocation();
-      setLoadedLocation(true);
     }
   })
 
@@ -90,7 +88,8 @@ function YardSales({ signedIn }: Props) {
         <YardSalesIcons pickedEvents={pickedEvents} setEvents={setEvents} pickedTime={pickedTime} setTime={setTime} />
       </Box>
       <Box sx={{ height: `100%`, }}>
-        <YardSalesMap location={location} setLocation={setLocation} pickedEvents={pickedEvents} pickedTime={pickedTime} yardsales={yardsales} />
+        <YardSalesMap location={location} setLocation={setLocation} loadedLocation={loadedLocation}
+          pickedEvents={pickedEvents} pickedTime={pickedTime} yardsales={yardsales} />
       </Box>
 
       {/* ================ Below has absolute positioning ======================= */}
