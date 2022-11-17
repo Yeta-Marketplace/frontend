@@ -1,6 +1,8 @@
 import { Popup } from 'react-map-gl';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import NavigateIcon from '@mui/icons-material/AssistantDirection';
 import Stack from '@mui/material/Stack';
 import { timeColors } from './Items'
 import moment from 'moment';
@@ -61,13 +63,16 @@ function YardSalesSelectedPopup({ selectedYardsale, setSelectedYardsale }: Props
           }
         </Stack>
 
-        <a
+        <Button
+          color='secondary'
+          variant="outlined"
+          endIcon={<NavigateIcon />}
           target="_blank"
           rel="noopener noreferrer"
           href={"https://www.google.com/maps/search/?api=1&query=" + selectedYardsale.latitude.toString() + "%2C" + selectedYardsale.longitude.toString()}
         >
-          Open in Google Maps
-        </a>
+          Navigate
+        </Button>
       </Stack>
     </Popup >
   )
