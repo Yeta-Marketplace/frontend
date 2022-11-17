@@ -16,7 +16,7 @@ type Props = {
   setTime: Function,
 }
 
-function YardSalesIcons({ pickedEvents, setEvents, pickedTime, setTime }: Props) {
+function Navbar({ pickedEvents, setEvents, pickedTime, setTime }: Props) {
 
   const handleEvents = (
     event: React.MouseEvent<HTMLElement>,
@@ -99,4 +99,4 @@ function YardSalesIcons({ pickedEvents, setEvents, pickedTime, setTime }: Props)
   )
 }
 
-export default YardSalesIcons
+export default Navbar

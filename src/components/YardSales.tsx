@@ -13,7 +13,7 @@ import BackIcon from '@mui/icons-material/ArrowDownward';
 import { ILocation } from '../interfaces/location';
 import YardSalesMap from './YardSales/Map';
 import YardSalesAdd from './YardSales/Add';
-import YardSalesIcons from './YardSales/Icons';
+import Navbar from './YardSales/Navbar';
 import { events, times } from './YardSales/Items'
 
 import { YardsalesService, YardSaleRead } from '../services/client'
@@ -85,7 +85,7 @@ function YardSales({ signedIn }: Props) {
   return (
     <Box sx={{ height: `calc(100vh - ${headerHeight}px)`, width: '100%', overflow: 'hidden' }} >
       <Box sx={{ height: headerHeight, backgroundColor: 'white', }} >
-        <YardSalesIcons pickedEvents={pickedEvents} setEvents={setEvents} pickedTime={pickedTime} setTime={setTime} />
+        <Navbar pickedEvents={pickedEvents} setEvents={setEvents} pickedTime={pickedTime} setTime={setTime} />
       </Box>
       <Box sx={{ height: `100%`, }}>
         <YardSalesMap location={location} setLocation={setLocation} loadedLocation={loadedLocation}
