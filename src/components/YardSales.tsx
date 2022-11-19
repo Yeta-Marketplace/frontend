@@ -84,9 +84,11 @@ function YardSales({ signedIn }: Props) {
 
   return (
     <Box sx={{ height: `calc(100vh - ${headerHeight}px)`, width: '100%', overflow: 'hidden' }} >
+
       <Box sx={{ height: headerHeight, backgroundColor: 'white', }} >
         <Navbar pickedEvents={pickedEvents} setEvents={setEvents} pickedTime={pickedTime} setTime={setTime} />
       </Box>
+
       <Box sx={{ height: `100%`, }}>
         <YardSalesMap location={location} setLocation={setLocation} loadedLocation={loadedLocation}
           pickedEvents={pickedEvents} pickedTime={pickedTime} yardsales={yardsales} />
