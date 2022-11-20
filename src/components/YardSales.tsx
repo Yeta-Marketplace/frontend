@@ -32,7 +32,7 @@ function YardSales({ signedIn }: Props) {
   const [lackingPermission, setLackingPermission] = useState(false);
   const [loadedLocation, setLoadedLocation] = useState(false);
 
-  const [pickedEvents, setEvents] = useState(() => events.map((event) => event.key));
+  const [pickedEvents, setEvents] = useState(['yardsales']);  //() => events.map((event) => event.key));
   const [pickedTime, setTime] = useState('today');
 
   // TODO: Utilize status field
