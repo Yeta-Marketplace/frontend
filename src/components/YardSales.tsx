@@ -9,12 +9,12 @@ import Fab from '@mui/material/Fab';
 import Slide from '@mui/material/Slide';
 import AddIcon from '@mui/icons-material/Add';
 import BackIcon from '@mui/icons-material/ArrowDownward';
+import Skeleton from '@mui/material/Skeleton';
 
 import { ILocation } from '../interfaces/location';
 import YardSalesMap from './YardSales/Map';
 import YardSalesAdd from './YardSales/Add';
 import Navbar from './YardSales/Navbar';
-import { events, times } from './YardSales/Items'
 
 import { YardsalesService, YardSaleRead } from '../services/client'
 
@@ -28,12 +28,16 @@ function YardSales({ signedIn }: Props) {
   const theme = useTheme();
   const headerHeight = useAppBarHeight();
 
-  const [location, setLocation] = useState<ILocation>({ latitude: 39.95, longitude: -74.2 });
-  const [lackingPermission, setLackingPermission] = useState(false);
-  const [loadedLocation, setLoadedLocation] = useState(false);
-
   const [pickedEvents, setEvents] = useState(['yardsales']);  //() => events.map((event) => event.key));
   const [pickedTime, setTime] = useState('today');
+
+  const [userLocation, setUserLocation] = useState<ILocation | null>(null);
+  const [mapCenter, setMapCenter] = useState<ILocation | null>(null);
+  const [addYardsaleLocation, setAddYardsaleLocation] = useState<ILocation | null>(null);
+
+  const [mapLoaded, setMapLoaded] = useState(false);
+
+  const located = !!userLocation && !!mapCenter && !!addYardsaleLocation;
 
   // TODO: Utilize status field
   const [status, setStatus] = useState<string | null>(null);
@@ -41,13 +45,43 @@ function YardSales({ signedIn }: Props) {
 
   const [yardsales, setYardsales] = useState<YardSaleRead[]>([]);
 
+  const updateLocations = (location: ILocation) => {
+    setUserLocation(location);
+    setMapCenter(location);
+    setAddYardsaleLocation(location);
+  };
+
+  useEffect(() => {
+    async function getLocation() {
+      if (!navigator.geolocation) {
+        setStatus('Geolocation is not supported by your browser');
+        return;
+      };
+
+      if (!userLocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            // updateLocations({ ...position.coords });
+            updateLocations({ latitude: position.coords.latitude, longitude: position.coords.longitude });
+          },
+          () => {
+            setStatus('Unable to retrieve your location. Please check your permissions');
+          }
+        )
+      }
+    }
+    getLocation();
+  }, []);
+
   useEffect(() => {
     async function getYardsales() {
-      const newYardsales = await YardsalesService.readYardsales(location.latitude, location.longitude, 100, 0, 50);
+      if (!mapCenter) return;
+
+      const newYardsales = await YardsalesService.readYardsales(mapCenter.latitude, mapCenter.longitude, 200, 0, 50);
       setYardsales(newYardsales);
     }
     getYardsales();
-  }, [loadedLocation]);
+  }, [mapCenter?.latitude, mapCenter?.longitude]);
 
   const addYardsale = (yardsale: YardSaleRead) => {
     setYardsales([...yardsales, yardsale]);
@@ -57,41 +91,27 @@ function YardSales({ signedIn }: Props) {
     setShowCreateForm((prev) => !prev);
   };
 
-  const getLocation = () => {
-    if (!navigator.geolocation) {
-      setStatus('Geolocation is not supported by your browser');
-    } else {
-      setStatus('Locating...');
-      navigator.geolocation.getCurrentPosition((position) => {
-        setStatus(null);
-        setLocation({ latitude: position.coords.latitude, longitude: position.coords.longitude });
-        setLoadedLocation(true);
-      }, () => {
-        setStatus('Unable to retrieve your location. Please check your permissions');
-        setLackingPermission(true);
-      },
-        // { enableHighAccuracy: true } // might slow things down
-      );
-    }
-  }
-
-  useEffect(() => {
-    if (!lackingPermission && !loadedLocation) {
-      getLocation();
-    }
-  })
-
-
   return (
     <Box sx={{ height: `calc(100vh - ${headerHeight}px)`, width: '100%', overflow: 'hidden' }} >
 
       <Box sx={{ height: headerHeight, backgroundColor: 'white', }} >
         <Navbar pickedEvents={pickedEvents} setEvents={setEvents} pickedTime={pickedTime} setTime={setTime} />
       </Box>
-
       <Box sx={{ height: `100%`, }}>
-        <YardSalesMap location={location} setLocation={setLocation} loadedLocation={loadedLocation}
-          pickedEvents={pickedEvents} pickedTime={pickedTime} yardsales={yardsales} />
+        <>
+          {!mapLoaded && <Skeleton animation="wave" variant="rectangular" height={'100%'} style={{ paddingBottom: 50 }} />}
+          {located &&
+            <YardSalesMap
+              {...{
+                userLocation, setUserLocation,
+                mapCenter, setMapCenter,
+                addYardsaleLocation, setAddYardsaleLocation,
+                updateLocations, setMapLoaded,
+                pickedEvents, pickedTime, yardsales
+              }}
+            />
+          }
+        </>
       </Box>
 
       {/* ================ Below has absolute positioning ======================= */}
@@ -107,11 +127,13 @@ function YardSales({ signedIn }: Props) {
       </Fab>
 
       {/* ============ Add Form ============== */}
-      <Slide direction="up" in={showCreateFrom} mountOnEnter unmountOnExit >
-        <Container sx={{ background: 'white', position: 'fixed', bottom: 0, left: 0, right: 0, borderRadius: '25px 25px 0px 0px' }}>
-          <YardSalesAdd location={location} signedIn={signedIn} addYardsale={addYardsale} />
-        </Container>
-      </Slide >
+      {!!addYardsaleLocation &&
+        <Slide direction="up" in={showCreateFrom} mountOnEnter unmountOnExit >
+          <Container sx={{ background: 'white', position: 'fixed', bottom: 0, left: 0, right: 0, borderRadius: '25px 25px 0px 0px' }}>
+            <YardSalesAdd location={addYardsaleLocation} signedIn={signedIn} addYardsale={addYardsale} />
+          </Container>
+        </Slide >
+      }
     </Box >
   )
 }

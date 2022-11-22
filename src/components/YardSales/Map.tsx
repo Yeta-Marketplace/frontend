@@ -16,6 +16,7 @@ import {
   faWarehouse as YardSaleIcon,
   faGhost as HalloweenIcon,
   faLocationPin as PinIcon,
+  faUserSecret as UserLocationPin,
 } from '@fortawesome/free-solid-svg-icons'
 
 import { YardSaleRead } from '../../services/client'
@@ -41,26 +42,43 @@ function computeScaleFromZoom(zoom: number): number {
 
 
 type Props = {
-  location: ILocation,
-  setLocation: Function,
-  loadedLocation: boolean,
+  userLocation: ILocation,
+  setUserLocation: Function,
+  mapCenter: ILocation,
+  setMapCenter: Function,
+  addYardsaleLocation: ILocation,
+  setAddYardsaleLocation: Function,
+  updateLocations: Function,
+  setMapLoaded: Function,
   pickedEvents: string[],
   pickedTime: string,
   yardsales: YardSaleRead[]
 }
 
-function YardSalesMap({ location, setLocation, loadedLocation, pickedEvents, pickedTime, yardsales }: Props) {
+function YardSalesMap({
+  userLocation,
+  setUserLocation,
+  mapCenter,
+  setMapCenter,
+  addYardsaleLocation,
+  setAddYardsaleLocation,
+  updateLocations,
+  setMapLoaded,
+  pickedEvents,
+  pickedTime,
+  yardsales
+}: Props) {
 
   const [viewState, setViewState] = useState({
-    ...location,
+    ...mapCenter,
     zoom: 11
   });
 
   useEffect(() => {
-    setViewState({ ...location, zoom: viewState.zoom });
-  }, [loadedLocation])
+    setViewState({ ...mapCenter, zoom: viewState.zoom });
+  }, [userLocation])
 
-  const ghosts = useMemo<Ghost[]>(() => coords(location.latitude, location.longitude, 10), [location]);
+  const ghosts = useMemo<Ghost[]>(() => coords(userLocation.latitude, userLocation.longitude, 10), [userLocation]);
   const [selectedYardsale, setSelectedYardsale] = useState<YardSaleRead | null>(null);
 
   const scale = computeScaleFromZoom(viewState.zoom);
@@ -122,18 +140,31 @@ function YardSalesMap({ location, setLocation, loadedLocation, pickedEvents, pic
       {...viewState}
       style={{ height: '100%' }}
       reuseMaps
-      onMove={evt => setViewState(evt.viewState)}
+      onMove={evt => {
+        setViewState(evt.viewState);
+        setMapCenter({ latitude: Math.round(evt.viewState.latitude), longitude: Math.round(evt.viewState.longitude) });
+      }}
       mapStyle="mapbox://styles/mapbox/streets-v9"
       mapboxAccessToken={MAPBOX_TOKEN}
-      onClick={e => { setLocation({ latitude: e.lngLat.lat, longitude: e.lngLat.lng }); }}
+      onClick={e => { setAddYardsaleLocation({ latitude: e.lngLat.lat, longitude: e.lngLat.lng }); }}
+      onLoad={e => setMapLoaded(true)}
     >
       <NavigationControl />
-      <GeolocateControl onGeolocate={e =>
-        setLocation({ latitude: e.coords.latitude, longitude: e.coords.longitude })
+      <GeolocateControl onGeolocate={position =>
+        updateLocations({ latitude: position.coords.latitude, longitude: position.coords.longitude })
       } />
 
       {/* YARD SALES AROUND YOU */}
       {pickedEvents.includes('yardsales') && yardsaleMarkers}
+
+      {/* You  */}
+      <Marker
+        latitude={userLocation.latitude}
+        longitude={userLocation.longitude}
+        anchor='bottom'
+      >
+        <FontAwesomeIcon icon={UserLocationPin} size='3x' />
+      </Marker>
 
       {/* ====== FUN ====== */}
       {pickedEvents.includes('halloween') && ghostMarkers}
@@ -144,15 +175,16 @@ function YardSalesMap({ location, setLocation, loadedLocation, pickedEvents, pic
       {/* CURRENT/CLICKED LOCATION MARKER */}
       <Marker
         draggable
-        latitude={location.latitude}
-        longitude={location.longitude}
+        latitude={addYardsaleLocation.latitude}
+        longitude={addYardsaleLocation.longitude}
         anchor='bottom'
         onDragEnd={e => {
-          setLocation({ latitude: e.lngLat.lat, longitude: e.lngLat.lng });
+          setAddYardsaleLocation({ latitude: e.lngLat.lat, longitude: e.lngLat.lng });
         }}
       >
         <AddYardSaleIcon color='secondary' fontSize='large' sx={{ fontSize: '45px' }} />
       </Marker>
+
 
     </Map>
   )
