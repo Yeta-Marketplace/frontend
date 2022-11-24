@@ -82,7 +82,7 @@ function YardSales({ signedIn }: Props) {
     async function getYardsales() {
       if (!mapCenter) return;
 
-      const newYardsales = await YardsalesService.readYardsales(mapCenter.latitude, mapCenter.longitude, 200, 0, 50);
+      const newYardsales = await YardsalesService.readYardsales(mapCenter.latitude, mapCenter.longitude, 10000, 0, 50);
       setYardsales(newYardsales);
     }
     getYardsales();
