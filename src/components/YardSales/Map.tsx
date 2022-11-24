@@ -9,14 +9,13 @@ import { alpha } from "@mui/material";
 
 import { timeColors } from './Items';
 
-// import AddYardSaleIcon from '@mui/icons-material/AddBusiness';
 import AddYardSaleIcon from '@mui/icons-material/AddLocationAlt';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
   faWarehouse as YardSaleIcon,
   faGhost as HalloweenIcon,
   faLocationPin as PinIcon,
-  faUserSecret as UserLocationPin,
+  faUserNinja as UserLocationPin,
 } from '@fortawesome/free-solid-svg-icons'
 
 import { YardSaleRead } from '../../services/client'
@@ -157,15 +156,6 @@ function YardSalesMap({
       {/* YARD SALES AROUND YOU */}
       {pickedEvents.includes('yardsales') && yardsaleMarkers}
 
-      {/* You  */}
-      <Marker
-        latitude={userLocation.latitude}
-        longitude={userLocation.longitude}
-        anchor='bottom'
-      >
-        <FontAwesomeIcon icon={UserLocationPin} size='3x' />
-      </Marker>
-
       {/* ====== FUN ====== */}
       {pickedEvents.includes('halloween') && ghostMarkers}
 
@@ -183,6 +173,15 @@ function YardSalesMap({
         }}
       >
         <AddYardSaleIcon color='secondary' fontSize='large' sx={{ fontSize: '45px' }} />
+      </Marker>
+
+      {/* You  */}
+      <Marker
+        latitude={userLocation.latitude}
+        longitude={userLocation.longitude}
+        anchor='bottom'
+      >
+        <FontAwesomeIcon icon={UserLocationPin} size='3x' />
       </Marker>
 
 

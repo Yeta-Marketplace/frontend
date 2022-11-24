@@ -3,13 +3,14 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import useAppBarHeight from '../utils/useAppBarHeight'
 import { useEffect, useState } from 'react';
 import { useTheme } from '@mui/material/styles';
-import Box from '@mui/material/Box'
+import Box from '@mui/material/Box';
 import Container from '@mui/material/Container'
 import Fab from '@mui/material/Fab';
 import Slide from '@mui/material/Slide';
 import AddIcon from '@mui/icons-material/Add';
 import BackIcon from '@mui/icons-material/ArrowDownward';
-import Skeleton from '@mui/material/Skeleton';
+import CircularProgress from '@mui/material/CircularProgress';
+import Typography from '@mui/material/Typography';
 
 import { ILocation } from '../interfaces/location';
 import YardSalesMap from './YardSales/Map';
@@ -36,6 +37,7 @@ function YardSales({ signedIn }: Props) {
   const [addYardsaleLocation, setAddYardsaleLocation] = useState<ILocation | null>(null);
 
   const [mapLoaded, setMapLoaded] = useState(false);
+  const [mapStatus, setMapStatus] = useState('');
 
   const located = !!userLocation && !!mapCenter && !!addYardsaleLocation;
 
@@ -59,10 +61,13 @@ function YardSales({ signedIn }: Props) {
       };
 
       if (!userLocation) {
+        setMapStatus('Locating You');
+
         navigator.geolocation.getCurrentPosition(
           (position) => {
             // updateLocations({ ...position.coords });
             updateLocations({ latitude: position.coords.latitude, longitude: position.coords.longitude });
+            setMapStatus('Loading Map');
           },
           () => {
             setStatus('Unable to retrieve your location. Please check your permissions');
@@ -97,9 +102,31 @@ function YardSales({ signedIn }: Props) {
       <Box sx={{ height: headerHeight, backgroundColor: 'white', }} >
         <Navbar pickedEvents={pickedEvents} setEvents={setEvents} pickedTime={pickedTime} setTime={setTime} />
       </Box>
-      <Box sx={{ height: `100%`, }}>
-        <>
-          {!mapLoaded && <Skeleton animation="wave" variant="rectangular" height={'100%'} style={{ paddingBottom: 50 }} />}
+
+      <Box
+        display="flex"
+        flexDirection='column'
+        justifyContent="center"
+        alignItems="center"
+        height='100%'
+        position='relative'
+      >
+        <Box
+          visibility={!mapLoaded ? 'visible' : 'hidden'}
+          display="flex"
+          flexDirection='column'
+          alignItems="center"
+          position='absolute'
+        >
+          <CircularProgress color='secondary' size="5rem" />
+          <Typography variant='h4' mt={2} color='grey'> {mapStatus}</Typography>
+        </Box>
+
+        <Box
+          height='100%'
+          width='100%'
+          visibility={mapLoaded ? 'visible' : 'hidden'}
+        >
           {located &&
             <YardSalesMap
               {...{
@@ -111,7 +138,7 @@ function YardSales({ signedIn }: Props) {
               }}
             />
           }
-        </>
+        </Box>
       </Box>
 
       {/* ================ Below has absolute positioning ======================= */}
