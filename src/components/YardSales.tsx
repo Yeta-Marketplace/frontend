@@ -2,6 +2,8 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 
 import useAppBarHeight from '../utils/useAppBarHeight'
 import { useEffect, useState } from 'react';
+import moment from 'moment';
+
 import { useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container'
@@ -83,7 +85,8 @@ function YardSales({ signedIn }: Props) {
       if (!mapCenter) return;
 
       const newYardsales = await YardsalesService.readYardsales(mapCenter.latitude, mapCenter.longitude, 10000, 0, 50);
-      setYardsales(newYardsales);
+      // Sort below helps display today's sales on top of tomorrow's. Cheating basically
+      setYardsales(newYardsales.sort((y1, y2) => moment(y2.start_date).diff(moment(y1.start_date))));
     }
     getYardsales();
   }, [mapCenter?.latitude, mapCenter?.longitude]);

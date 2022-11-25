@@ -15,8 +15,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 import { useFormik } from 'formik';
 import { useState } from 'react';
-import { Moment } from 'moment';
-import moment from 'moment';
+import moment, { Moment } from 'moment';
 
 import { YardsalesService, YardSaleCreate } from '../../services/client'
 
