@@ -51,7 +51,8 @@ type Props = {
   setMapLoaded: Function,
   pickedEvents: string[],
   pickedTime: string,
-  yardsales: YardSaleRead[]
+  yardsales: YardSaleRead[],
+  zoom: number
 }
 
 function YardSalesMap({
@@ -65,12 +66,13 @@ function YardSalesMap({
   setMapLoaded,
   pickedEvents,
   pickedTime,
-  yardsales
+  yardsales,
+  zoom
 }: Props) {
 
   const [viewState, setViewState] = useState({
     ...mapCenter,
-    zoom: 11
+    zoom: zoom
   });
 
   useEffect(() => {

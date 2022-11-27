@@ -13,6 +13,8 @@ import AddIcon from '@mui/icons-material/Add';
 import BackIcon from '@mui/icons-material/ArrowDownward';
 import CircularProgress from '@mui/material/CircularProgress';
 import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
+import Tooltip from '@mui/material/Tooltip';
 
 import { ILocation } from '../interfaces/location';
 import YardSalesMap from './YardSales/Map';
@@ -25,6 +27,13 @@ type Props = {
   signedIn: boolean
 }
 
+const loadingMessages = [
+  'Looking For You',
+  'Still Looking For You',
+  'Where Are You Hiding',
+  'Did you even give us permission?',
+  'Are you sure?',
+]
 
 function YardSales({ signedIn }: Props) {
 
@@ -37,11 +46,13 @@ function YardSales({ signedIn }: Props) {
   const [userLocation, setUserLocation] = useState<ILocation | null>(null);
   const [mapCenter, setMapCenter] = useState<ILocation | null>(null);
   const [addYardsaleLocation, setAddYardsaleLocation] = useState<ILocation | null>(null);
+  const [zoom, setZoom] = useState(11);
 
+  const [mapStatus, setMapStatus] = useState(loadingMessages[0]);
+  const [showWithoutLocationButton, setShowWithoutLocationButton] = useState(true);
+  const [locating, setLocating] = useState(true);
+  const [locatingMsgIndex, setLocatingMsgIndex] = useState(0);
   const [mapLoaded, setMapLoaded] = useState(false);
-  const [mapStatus, setMapStatus] = useState('');
-
-  const located = !!userLocation && !!mapCenter && !!addYardsaleLocation;
 
   // TODO: Utilize status field
   const [status, setStatus] = useState<string | null>(null);
@@ -49,36 +60,70 @@ function YardSales({ signedIn }: Props) {
 
   const [yardsales, setYardsales] = useState<YardSaleRead[]>([]);
 
+  const located = !!userLocation && !!mapCenter && !!addYardsaleLocation;
+
   const updateLocations = (location: ILocation) => {
     setUserLocation(location);
     setMapCenter(location);
     setAddYardsaleLocation(location);
   };
 
+  const addYardsale = (yardsale: YardSaleRead) => {
+    setYardsales([...yardsales, yardsale]);
+  };
+
+  const handleCreateFormChange = () => {
+    setShowCreateForm((prev) => !prev);
+  };
+
+  const proceedWithoutLocation = () => {
+    // Center of U.S. zoomed out
+    updateLocations({ latitude: 36, longitude: -97 });
+    setZoom(4);
+    setShowWithoutLocationButton(false);
+    setLocating(false);
+    setMapStatus('Loading Map');
+  };
+
+  useEffect(() => {
+    if (locating) {
+      setMapStatus(loadingMessages[locatingMsgIndex]);
+    }
+  }, [locatingMsgIndex]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setLocatingMsgIndex((prev) => ((prev + 1) % loadingMessages.length));
+    }, 2500);
+    return () => clearInterval(interval);
+  }, []);
+
   useEffect(() => {
     async function getLocation() {
       if (!navigator.geolocation) {
         setStatus('Geolocation is not supported by your browser');
+        proceedWithoutLocation();
         return;
       };
 
       if (!userLocation) {
-        setMapStatus('Locating You');
-
         navigator.geolocation.getCurrentPosition(
           (position) => {
             // updateLocations({ ...position.coords });
             updateLocations({ latitude: position.coords.latitude, longitude: position.coords.longitude });
+            setLocating(false);
             setMapStatus('Loading Map');
           },
           () => {
             setStatus('Unable to retrieve your location. Please check your permissions');
+            proceedWithoutLocation();
           }
         )
       }
     }
     getLocation();
   }, []);
+
 
   useEffect(() => {
     async function getYardsales() {
@@ -91,13 +136,6 @@ function YardSales({ signedIn }: Props) {
     getYardsales();
   }, [mapCenter?.latitude, mapCenter?.longitude]);
 
-  const addYardsale = (yardsale: YardSaleRead) => {
-    setYardsales([...yardsales, yardsale]);
-  };
-
-  const handleCreateFormChange = () => {
-    setShowCreateForm((prev) => !prev);
-  };
 
   return (
     <Box sx={{ height: `calc(100vh - ${headerHeight}px)`, width: '100%', overflow: 'hidden' }} >
@@ -123,6 +161,13 @@ function YardSales({ signedIn }: Props) {
         >
           <CircularProgress color='secondary' size="5rem" />
           <Typography variant='h4' mt={2} color='grey'> {mapStatus}</Typography>
+          {showWithoutLocationButton &&
+            <Box mt={4}>
+              <Tooltip title="Sharing location provides more features but is optional!">
+                <Button color='warning' variant='outlined' onClick={proceedWithoutLocation}> Proceed without location</Button>
+              </Tooltip>
+            </Box>
+          }
         </Box>
 
         <Box
@@ -137,7 +182,8 @@ function YardSales({ signedIn }: Props) {
                 mapCenter, setMapCenter,
                 addYardsaleLocation, setAddYardsaleLocation,
                 updateLocations, setMapLoaded,
-                pickedEvents, pickedTime, yardsales
+                pickedEvents, pickedTime, yardsales,
+                zoom
               }}
             />
           }
