@@ -21,7 +21,7 @@ import YardSalesMap from './YardSales/Map';
 import YardSalesAdd from './YardSales/Add';
 import Navbar from './YardSales/Navbar';
 
-import { YardsalesService, YardSaleRead } from '../services/client'
+import { EventsService, EventRead } from '../services/client'
 
 type Props = {
   signedIn: boolean
@@ -58,7 +58,7 @@ function YardSales({ signedIn }: Props) {
   const [status, setStatus] = useState<string | null>(null);
   const [showCreateFrom, setShowCreateForm] = useState(false);
 
-  const [yardsales, setYardsales] = useState<YardSaleRead[]>([]);
+  const [yardsales, setYardsales] = useState<EventRead[]>([]);
 
   const located = !!userLocation && !!mapCenter && !!addYardsaleLocation;
 
@@ -68,7 +68,7 @@ function YardSales({ signedIn }: Props) {
     setAddYardsaleLocation(location);
   };
 
-  const addYardsale = (yardsale: YardSaleRead) => {
+  const addYardsale = (yardsale: EventRead) => {
     setYardsales([...yardsales, yardsale]);
   };
 
@@ -129,7 +129,7 @@ function YardSales({ signedIn }: Props) {
     async function getYardsales() {
       if (!mapCenter) return;
 
-      const newYardsales = await YardsalesService.readYardsales(mapCenter.latitude, mapCenter.longitude, 10000, 0, 50);
+      const newYardsales = await EventsService.readEvents(mapCenter.latitude, mapCenter.longitude, 10000, 0, 50);
       // Sort below helps display today's sales on top of tomorrow's. Cheating basically
       setYardsales(newYardsales.sort((y1, y2) => moment(y2.start_date).diff(moment(y1.start_date))));
     }

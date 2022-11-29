@@ -18,7 +18,7 @@ import {
   faUserNinja as UserLocationPin,
 } from '@fortawesome/free-solid-svg-icons'
 
-import { YardSaleRead } from '../../services/client'
+import { EventRead } from '../../services/client'
 import { Point as MapboxPoint } from 'mapbox-gl';
 
 
@@ -51,7 +51,7 @@ type Props = {
   setMapLoaded: Function,
   pickedEvents: string[],
   pickedTime: string,
-  yardsales: YardSaleRead[],
+  yardsales: EventRead[],
   zoom: number
 }
 
@@ -80,7 +80,7 @@ function YardSalesMap({
   }, [userLocation])
 
   const ghosts = useMemo<Ghost[]>(() => coords(userLocation.latitude, userLocation.longitude, 10), [userLocation]);
-  const [selectedYardsale, setSelectedYardsale] = useState<YardSaleRead | null>(null);
+  const [selectedYardsale, setSelectedYardsale] = useState<EventRead | null>(null);
 
   const scale = computeScaleFromZoom(viewState.zoom);
 

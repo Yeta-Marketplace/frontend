@@ -2,11 +2,12 @@
 /* tslint:disable */
 /* eslint-disable */
 
-export type YardSaleCreate = {
+export type EventRead = {
     description?: string;
     latitude: number;
     longitude: number;
     start_date: string;
     end_date: string;
+    id: number;
 };
 

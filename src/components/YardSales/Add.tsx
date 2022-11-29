@@ -17,7 +17,7 @@ import { useFormik } from 'formik';
 import { useState } from 'react';
 import moment, { Moment } from 'moment';
 
-import { YardsalesService, YardSaleCreate } from '../../services/client'
+import { EventsService, EventCreate } from '../../services/client'
 
 
 type Props = {
@@ -33,7 +33,7 @@ function YardSalesAdd({ location, signedIn, addYardsale }: Props) {
   const [startDate, setStartDate] = useState<Moment>(moment());
   const [endDate, setEndDate] = useState<Moment>(moment());
 
-  const initialValues: YardSaleCreate = {
+  const initialValues: EventCreate = {
     description: '',
     latitude: location.latitude,
     longitude: location.longitude,
@@ -45,7 +45,9 @@ function YardSalesAdd({ location, signedIn, addYardsale }: Props) {
     initialValues: initialValues,
     onSubmit: (values) => {
       async function createYardSale() {
-        const newYardsale = signedIn ? await YardsalesService.createYardsale(values) : await YardsalesService.createYardsaleOpen(values);
+        // TODO: clean up below
+        // const newYardsale = signedIn ? await EventsService.createEvent(values) : await EventsService.createEventOpen(values);
+        const newYardsale = await EventsService.createEvent(values);
         addYardsale(newYardsale);
         setSuccessMsg("Yard Sale added Successfully! ");
         formik.values = initialValues;
