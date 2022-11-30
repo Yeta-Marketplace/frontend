@@ -7,10 +7,10 @@ import Stack from '@mui/material/Stack';
 import { timeColors } from './Items'
 import moment from 'moment';
 
-import { YardSaleRead } from '../../services/client'
+import { EventRead } from '../../services/client'
 
 type Props = {
-  selectedYardsale: YardSaleRead,
+  selectedYardsale: EventRead,
   setSelectedYardsale: Function
 }
 
