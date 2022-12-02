@@ -79,7 +79,7 @@ function YardSalesMap({
     setViewState({ ...mapCenter, zoom: viewState.zoom });
   }, [userLocation])
 
-  const ghosts = useMemo<Ghost[]>(() => coords(userLocation.latitude, userLocation.longitude, 10), [userLocation]);
+  // const ghosts = useMemo<Ghost[]>(() => coords(userLocation.latitude, userLocation.longitude, 10), [userLocation]);
   const [selectedYardsale, setSelectedYardsale] = useState<EventRead | null>(null);
 
   const scale = computeScaleFromZoom(viewState.zoom);
