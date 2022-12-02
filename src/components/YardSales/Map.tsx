@@ -145,7 +145,7 @@ function YardSalesMap({
         setViewState(evt.viewState);
         setMapCenter({ latitude: Math.round(evt.viewState.latitude), longitude: Math.round(evt.viewState.longitude) });
       }}
-      mapStyle="mapbox://styles/mapbox/streets-v9"
+      mapStyle="mapbox://styles/mathemmagician/clb67hniu000315p9ia3byczt"
       mapboxAccessToken={MAPBOX_TOKEN}
       onClick={e => { setAddYardsaleLocation({ latitude: e.lngLat.lat, longitude: e.lngLat.lng }); }}
       onLoad={e => setMapLoaded(true)}
