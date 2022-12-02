@@ -125,16 +125,16 @@ function YardSalesMap({
     }
     ), [yardsales, scale, pickedEvents, pickedTime]);
 
-  const ghostMarkers = useMemo(() =>
-    ghosts.map(ghost => {
-      return <Marker
-        key={ghost.latitude + ' ' + ghost.longitude}
-        latitude={ghost.latitude}
-        longitude={ghost.longitude}
-      >
-        <FontAwesomeIcon icon={HalloweenIcon} size='2x' color='white' fade />
-      </Marker>
-    }), [ghosts]);
+  // const ghostMarkers = useMemo(() =>
+  //   ghosts.map(ghost => {
+  //     return <Marker
+  //       key={ghost.latitude + ' ' + ghost.longitude}
+  //       latitude={ghost.latitude}
+  //       longitude={ghost.longitude}
+  //     >
+  //       <FontAwesomeIcon icon={HalloweenIcon} size='2x' color='white' fade />
+  //     </Marker>
+  //   }), [ghosts]);
 
   return (
     <Map
@@ -159,7 +159,7 @@ function YardSalesMap({
       {pickedEvents.includes('yardsales') && yardsaleMarkers}
 
       {/* ====== FUN ====== */}
-      {pickedEvents.includes('halloween') && ghostMarkers}
+      {/* {pickedEvents.includes('halloween') && ghostMarkers} */}
 
       {/* SELECTED YARD SALE */}
       {selectedYardsale && YardSalesSelectedPopup({ selectedYardsale, setSelectedYardsale })}
