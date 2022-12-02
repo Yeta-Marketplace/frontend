@@ -15,7 +15,7 @@ import {
   faWarehouse as YardSaleIcon,
   faGhost as HalloweenIcon,
   faLocationPin as PinIcon,
-  faUserNinja as UserLocationPin,
+  faUser as UserLocationPin,
 } from '@fortawesome/free-solid-svg-icons'
 
 import { EventRead } from '../../services/client'
@@ -183,7 +183,7 @@ function YardSalesMap({
         longitude={userLocation.longitude}
         anchor='bottom'
       >
-        <FontAwesomeIcon icon={UserLocationPin} size='3x' />
+        <FontAwesomeIcon icon={UserLocationPin} color='green' size='3x' />
       </Marker>
 
 
