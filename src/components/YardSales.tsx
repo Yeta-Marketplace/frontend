@@ -11,6 +11,7 @@ import Fab from '@mui/material/Fab';
 import Slide from '@mui/material/Slide';
 import AddIcon from '@mui/icons-material/Add';
 import BackIcon from '@mui/icons-material/ArrowDownward';
+// import LocationSearchingIcon from '@mui/icons-material/LocationSearching';
 import CircularProgress from '@mui/material/CircularProgress';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
@@ -201,6 +202,14 @@ function YardSales({ signedIn }: Props) {
         )
         }
       </Fab>
+
+      {/* ============ Find me ============== */}
+      {/* <Fab variant="extended" color="primary" aria-label="add"
+        sx={{ bottom: theme.spacing(12), right: theme.fab.right, position: theme.fab.position }}
+        onClick={handleCreateFormChange}>
+        <LocationSearchingIcon />
+      </Fab> */}
+
 
       {/* ============ Add Form ============== */}
       {!!addYardsaleLocation &&
