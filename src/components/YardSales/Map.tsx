@@ -13,6 +13,7 @@ import { MAPBOX_TOKEN } from '../../env'
 import YardSalesSelectedPopup from './SelectedPopup';
 import AddYardSaleIcon from '@mui/icons-material/AddLocationAlt';
 
+import YSimgUrl from '/src/icons/warehouse-solid.png'
 
 const getFeature = (event: EventRead): GeoJSON.Feature<GeoJSON.Geometry> => {
   return {
@@ -69,7 +70,7 @@ function YardSalesMap({
   useEffect(() => {
     const map = mapRef?.current?.getMap();
 
-    map?.loadImage('/src/icons/warehouse-solid.png', (error, image) => {
+    map?.loadImage(YSimgUrl, (error, image) => {
       if (error) throw error;
       if (image === undefined) return;
       // About sdf: https://docs.mapbox.com/help/troubleshooting/using-recolorable-images-in-mapbox-maps/#what-are-signed-distance-fields-sdf
