@@ -1,44 +1,29 @@
 
-import Map, { Marker, GeolocateControl, NavigationControl } from 'react-map-gl';
-import { useMemo, useState, useEffect } from 'react';
-import { MAPBOX_TOKEN } from '../../env'
+import { useRef, useState, useEffect, useMemo } from 'react';
+
+import { Map, Source, Layer, MapLayerMouseEvent, Marker, NavigationControl, GeolocateControl } from 'react-map-gl';
+import type { MapRef } from 'react-map-gl';
+import type { GeoJSONSource } from 'react-map-gl';
+import { clusterLayer, clusterCountLayer, unclusteredPointLayer } from './layers';
+
 import { ILocation } from '../../interfaces/location';
-import YardSalesSelectedPopup from './SelectedPopup';
-import moment from 'moment';
-import { alpha } from "@mui/material";
-
-import { timeColors } from './Items';
-
-import AddYardSaleIcon from '@mui/icons-material/AddLocationAlt';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import {
-  faWarehouse as YardSaleIcon,
-  faGhost as HalloweenIcon,
-  faLocationPin as PinIcon,
-  faUser as UserLocationPin,
-} from '@fortawesome/free-solid-svg-icons'
-
 import { EventRead } from '../../services/client'
-import { Point as MapboxPoint } from 'mapbox-gl';
+
+import { MAPBOX_TOKEN } from '../../env'
+import YardSalesSelectedPopup from './SelectedPopup';
+import AddYardSaleIcon from '@mui/icons-material/AddLocationAlt';
 
 
-type Ghost = {
-  latitude: number,
-  longitude: number
+const getFeature = (event: EventRead): GeoJSON.Feature<GeoJSON.Geometry> => {
+  return {
+    "type": "Feature",
+    "properties": { "id": event.id },
+    "geometry": {
+      "type": "Point",
+      "coordinates": [event.longitude, event.latitude]
+    }
+  }
 }
-
-function coords(latitude: number, longitude: number, n: number): Ghost[] {
-  const coordinates = Array.from({ length: n }, () => ({
-    latitude: latitude + Math.random() * 2 - 1,
-    longitude: longitude + Math.random() * 2 - 1,
-  }));
-  return coordinates
-}
-
-function computeScaleFromZoom(zoom: number): number {
-  return Math.max(0.5, Math.min(Math.floor(zoom) / 10, 1));
-}
-
 
 type Props = {
   userLocation: ILocation,
@@ -70,96 +55,97 @@ function YardSalesMap({
   zoom
 }: Props) {
 
+  const mapRef = useRef<MapRef>(null);
   const [viewState, setViewState] = useState({
     ...mapCenter,
     zoom: zoom
   });
+  const [selectedYardsale, setSelectedYardsale] = useState<EventRead | null>(null);
 
   useEffect(() => {
     setViewState({ ...mapCenter, zoom: viewState.zoom });
-  }, [userLocation])
+  }, [userLocation]);
 
-  // const ghosts = useMemo<Ghost[]>(() => coords(userLocation.latitude, userLocation.longitude, 10), [userLocation]);
-  const [selectedYardsale, setSelectedYardsale] = useState<EventRead | null>(null);
+  useEffect(() => {
+    const map = mapRef?.current?.getMap();
 
-  const scale = computeScaleFromZoom(viewState.zoom);
+    map?.loadImage('/src/icons/warehouse-solid.png', (error, image) => {
+      if (error) throw error;
+      if (image === undefined) return;
+      // About sdf: https://docs.mapbox.com/help/troubleshooting/using-recolorable-images-in-mapbox-maps/#what-are-signed-distance-fields-sdf
+      if (!map.hasImage('yardsale')) map.addImage('yardsale', image, { sdf: true });
+    })
 
-  const timedelta = (pickedTime == 'this_week' ? 7 : 0);
 
-  const yardsaleMarkers = useMemo(() =>
-    yardsales.map(yardsale => {
-      const start = moment().format('YYYY-MM-DD');
-      const end = moment().add(timedelta, 'days').format('YYYY-MM-DD');
-      let color = null;
+  }); // This might need some condition to make sure it doesn't refresh every time
 
-      if (moment(yardsale.start_date).isAfter(end)) {
-        // Future YS
-        color = timeColors['future'];
-      } else if (moment(yardsale.end_date).isBefore(start)) {
-        // Past YS
-        color = alpha(timeColors['past'], 0.5);
-      } else {
-        color = timeColors['present'];
+
+  const onClick = ((mapRef == null) ? undefined
+    : (event: MapLayerMouseEvent) => {
+
+      const features = event?.features;
+      if ((features === undefined) || (features.length == 0)) return;
+      const feature = features[0];
+
+      if (feature.layer.id === clusterLayer.id) {
+        const clusterId = feature?.properties?.cluster_id;
+        const mapboxSource = mapRef.current?.getSource('events') as GeoJSONSource;
+
+        mapboxSource.getClusterExpansionZoom(clusterId, (err, zoom) => {
+          if (err) return;
+          if (feature.geometry.type === 'Point')
+            mapRef.current?.easeTo({
+              center: [feature.geometry.coordinates[0], feature.geometry.coordinates[1]],
+              zoom,
+              duration: 500
+            });
+        });
+      } else if (feature.layer.id === unclusteredPointLayer.id) {
+        const yardsale = yardsales.find(y => y.id === feature.properties?.id);
+        if (!!yardsale) setSelectedYardsale(yardsale);
       }
-
-      const offset = new MapboxPoint(-12, -28);
-
-      return <Marker
-        key={yardsale.id + color}
-        latitude={yardsale.latitude}
-        longitude={yardsale.longitude}
-        color={color}
-        onClick={e => {
-          setSelectedYardsale(yardsale);
-        }}
-        offset={offset.mult(scale)}  // Manual hack to properly align markers
-      >
-        <span className="fa-layers fa-fw "
-          style={{ transform: `scale(${scale})` }}
-        >
-          <FontAwesomeIcon icon={PinIcon} size='4x' color={color} />
-          <FontAwesomeIcon icon={PinIcon} size='3x' inverse transform="right-2 up-0.5" />
-          <FontAwesomeIcon icon={YardSaleIcon} size='lg' transform="right-8.7 up-6" color={color} />
-        </span>
-      </Marker>
     }
-    ), [yardsales, scale, pickedEvents, pickedTime]);
+  );
 
-  // const ghostMarkers = useMemo(() =>
-  //   ghosts.map(ghost => {
-  //     return <Marker
-  //       key={ghost.latitude + ' ' + ghost.longitude}
-  //       latitude={ghost.latitude}
-  //       longitude={ghost.longitude}
-  //     >
-  //       <FontAwesomeIcon icon={HalloweenIcon} size='2x' color='white' fade />
-  //     </Marker>
-  //   }), [ghosts]);
+
+  const data = useMemo<GeoJSON.FeatureCollection>(() => {
+    return {
+      "type": "FeatureCollection",
+      "features": yardsales.map(y => getFeature(y))
+    }
+  }, [yardsales])
 
   return (
     <Map
       {...viewState}
-      style={{ height: '100%' }}
-      reuseMaps
-      onMove={evt => {
-        setViewState(evt.viewState);
-        setMapCenter({ latitude: Math.round(evt.viewState.latitude), longitude: Math.round(evt.viewState.longitude) });
-      }}
+      ref={mapRef}
       mapStyle="mapbox://styles/mathemmagician/clb67hniu000315p9ia3byczt"
       mapboxAccessToken={MAPBOX_TOKEN}
-      onClick={e => { setAddYardsaleLocation({ latitude: e.lngLat.lat, longitude: e.lngLat.lng }); }}
       onLoad={e => setMapLoaded(true)}
+      onMove={evt => {
+        setViewState(evt.viewState);
+        // setMapCenter({ latitude: Math.round(evt.viewState.latitude), longitude: Math.round(evt.viewState.longitude) });
+      }}
+      interactiveLayerIds={[clusterLayer.id!, unclusteredPointLayer.id!]}
+      onClick={onClick}
     >
       <NavigationControl />
       <GeolocateControl onGeolocate={position =>
         updateLocations({ latitude: position.coords.latitude, longitude: position.coords.longitude })
       } />
 
-      {/* YARD SALES AROUND YOU */}
-      {pickedEvents.includes('yardsales') && yardsaleMarkers}
-
-      {/* ====== FUN ====== */}
-      {/* {pickedEvents.includes('halloween') && ghostMarkers} */}
+      <Source
+        id="events"
+        type="geojson"
+        data={data} //"https://docs.mapbox.com/mapbox-gl-js/assets/earthquakes.geojson"
+        cluster={true}
+        clusterMaxZoom={7}
+        clusterRadius={50}
+      >
+        <Layer {...clusterLayer} />
+        <Layer {...clusterCountLayer} />
+        <Layer {...unclusteredPointLayer} />
+      </Source>
 
       {/* SELECTED YARD SALE */}
       {selectedYardsale && YardSalesSelectedPopup({ selectedYardsale, setSelectedYardsale })}
@@ -176,16 +162,6 @@ function YardSalesMap({
       >
         <AddYardSaleIcon color='secondary' fontSize='large' sx={{ fontSize: '45px' }} />
       </Marker>
-
-      {/* You  */}
-      <Marker
-        latitude={userLocation.latitude}
-        longitude={userLocation.longitude}
-        anchor='bottom'
-      >
-        <FontAwesomeIcon icon={UserLocationPin} color='green' size='3x' />
-      </Marker>
-
 
     </Map>
   )

@@ -79,8 +79,8 @@ function YardSales({ signedIn }: Props) {
 
   const proceedWithoutLocation = () => {
     // Center of U.S. zoomed out
-    updateLocations({ latitude: 36, longitude: -97 });
-    setZoom(4);
+    updateLocations({ latitude: 40, longitude: -100 });
+    setZoom(3);
     setShowWithoutLocationButton(false);
     setLocating(false);
     setMapStatus('Loading Map');
@@ -130,7 +130,7 @@ function YardSales({ signedIn }: Props) {
     async function getYardsales() {
       if (!mapCenter) return;
 
-      const newYardsales = await EventsService.readEvents(mapCenter.latitude, mapCenter.longitude, 10000, 0, 50);
+      const newYardsales = await EventsService.readEvents(mapCenter.latitude, mapCenter.longitude, 10000, 0, 5000);
       // Sort below helps display today's sales on top of tomorrow's. Cheating basically
       setYardsales(newYardsales.sort((y1, y2) => moment(y2.start_date).diff(moment(y1.start_date))));
     }
