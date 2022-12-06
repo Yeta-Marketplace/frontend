@@ -183,10 +183,10 @@ function ResponsiveAppBar({ signedIn }: Props) {
                 </Menu>
               </>
             ) : (
-              <Button component={RouterLink} to='/signin' color='secondary' size='large'
+              <Button component={RouterLink} to='/signup' color='secondary' size='large'
                 sx={{ fontSize: '1.3rem', fontWeight: 400, color: 'white' }}
               >
-                Sign In →
+                Join →
               </Button>
             )}
           </Box>

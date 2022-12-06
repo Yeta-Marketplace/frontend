@@ -67,7 +67,7 @@ const Signup = ({ }: Props) => {
           textAlign: 'center'
         }}
       >
-        <h1>Sign Up!</h1>
+        <h1>Join the community!</h1>
         <form onSubmit={formik.handleSubmit}>
           <TextField
             id="full_name"

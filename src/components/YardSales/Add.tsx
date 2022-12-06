@@ -98,7 +98,7 @@ function YardSalesAdd({ location, signedIn, addYardsale }: Props) {
         {
           signedIn
             ? <>Add Yard Sale!</>
-            : <><Link component={RouterLink} to='/signin' color='secondary'>Sign In</Link> to Add</>
+            : <><Link component={RouterLink} to='/signin' color='secondary'>Join</Link> to Add</>
         }
 
       </Typography>
