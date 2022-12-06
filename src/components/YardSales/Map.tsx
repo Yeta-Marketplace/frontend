@@ -120,6 +120,7 @@ function YardSalesMap({
     <Map
       {...viewState}
       ref={mapRef}
+      reuseMaps
       mapStyle="mapbox://styles/mathemmagician/clb67hniu000315p9ia3byczt"
       mapboxAccessToken={MAPBOX_TOKEN}
       onLoad={e => setMapLoaded(true)}
