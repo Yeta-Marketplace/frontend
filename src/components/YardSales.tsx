@@ -18,9 +18,9 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 
 import { ILocation } from '../interfaces/location';
-import YardSalesMap from './YardSales/Map';
-import YardSalesAdd from './YardSales/Add';
-import Navbar from './YardSales/Navbar';
+import YardSalesMap from './Events/Map';
+import YardSalesAdd from './Events/Add';
+import Navbar from './Events/Navbar';
 
 import { EventsService, EventRead } from '../services/client'
 
