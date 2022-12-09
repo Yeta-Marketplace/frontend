@@ -11,8 +11,8 @@ import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import Alert from '@mui/material/Alert';
 
-import { IUserSignin } from '../interfaces/user';
-import { LoginService } from '../services/client'
+import { IUserSignin } from '../../interfaces/user';
+import { LoginService } from '../../services/client'
 
 type Props = {
   setToken: Function

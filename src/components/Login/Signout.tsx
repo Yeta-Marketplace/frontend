@@ -4,7 +4,7 @@ import Container from '@mui/material/Container'
 import Alert from '@mui/material/Alert';
 import { Link } from 'react-router-dom'
 
-import { getLocalToken, removeLocalToken } from '../utils/token';
+import { getLocalToken, removeLocalToken } from '../../utils/token';
 
 type Props = {
     setToken: Function

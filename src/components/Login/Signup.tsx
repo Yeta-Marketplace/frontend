@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
-import axios, { AxiosError } from 'axios'
 import { useFormik } from 'formik';
 import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'
@@ -9,9 +8,9 @@ import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import Alert from '@mui/material/Alert';
 
-import { UsersService } from '../services/client'
-import { ApiError } from '../services/client';
-import type { Body_users_create_user_open } from '../services/client/models/Body_users_create_user_open';
+import { UsersService } from '../../services/client'
+import { ApiError } from '../../services/client';
+import type { Body_users_create_user_open } from '../../services/client/models/Body_users_create_user_open';
 
 type Props = {}
 
