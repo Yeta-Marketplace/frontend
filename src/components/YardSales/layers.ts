@@ -40,6 +40,6 @@ export const unclusteredPointLayer: LayerProps = {
     'icon-size': 0.4
   },
   'paint': {
-    'icon-color': '#f66200',
+    'icon-color': ['get', 'color'],
   }
 };

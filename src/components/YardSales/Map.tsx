@@ -1,5 +1,6 @@
 
 import { useRef, useState, useEffect, useMemo } from 'react';
+import moment from 'moment';
 
 import { Map, Source, Layer, MapLayerMouseEvent, Marker, NavigationControl, GeolocateControl } from 'react-map-gl';
 import type { MapRef } from 'react-map-gl';
@@ -13,12 +14,25 @@ import { MAPBOX_TOKEN } from '../../env'
 import YardSalesSelectedPopup from './SelectedPopup';
 import AddYardSaleIcon from '@mui/icons-material/AddLocationAlt';
 
-import YSimgUrl from '/src/icons/warehouse-solid.png'
+import YSimgUrl from '/src/icons/warehouse-solid.png';
+import { timeColors } from './Items';
+import { alpha } from "@mui/material";
 
-const getFeature = (event: EventRead): GeoJSON.Feature<GeoJSON.Geometry> => {
+const getFeature = (event: EventRead, start_date: string, end_date: string): GeoJSON.Feature<GeoJSON.Geometry> => {
+
+  let color = '#f66200'; // default - current sale
+
+  if (moment(event.start_date).isAfter(end_date)) {
+    // Future YS
+    color = timeColors['future'];
+  } else if (moment(event.end_date).isBefore(start_date)) {
+    // Past YS
+    color = alpha(timeColors['past'], 0.5);
+  }
+
   return {
     "type": "Feature",
-    "properties": { "id": event.id },
+    "properties": { "id": event.id, "color": color },
     "geometry": {
       "type": "Point",
       "coordinates": [event.longitude, event.latitude]
@@ -110,11 +124,16 @@ function YardSalesMap({
 
 
   const data = useMemo<GeoJSON.FeatureCollection>(() => {
+
+    const timedelta = (pickedTime == 'this_week' ? 7 : 0);
+    const start_date = moment().format('YYYY-MM-DD');
+    const end_date = moment().add(timedelta, 'days').format('YYYY-MM-DD');
+
     return {
       "type": "FeatureCollection",
-      "features": yardsales.map(y => getFeature(y))
+      "features": yardsales.map(y => getFeature(y, start_date, end_date))
     }
-  }, [yardsales])
+  }, [yardsales, pickedTime]);
 
   return (
     <Map
