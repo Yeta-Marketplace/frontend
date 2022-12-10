@@ -108,6 +108,8 @@ function YardSales({ signedIn }: Props) {
       };
 
       if (!userLocation) {
+        proceedWithoutLocation();
+
         navigator.geolocation.getCurrentPosition(
           (position) => {
             // updateLocations({ ...position.coords });
