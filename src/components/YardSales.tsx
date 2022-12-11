@@ -80,7 +80,7 @@ function YardSales({ signedIn }: Props) {
   const proceedWithoutLocation = () => {
     // Center of U.S. zoomed out
     updateLocations({ latitude: 40, longitude: -100 });
-    setZoom(3);
+    setZoom(4);
     setShowWithoutLocationButton(false);
     setLocating(false);
     setMapStatus('Loading Map');
